@@ -31,5 +31,20 @@ export async function registerRoutes(httpServer: Server, app: Express): Promise<
     res.json(product);
   });
 
+  app.get(api.prices.list.path, async (_req, res) => {
+    const prices = await storage.getPrices();
+    res.json(prices);
+  });
+
+  app.get(api.journey.list.path, async (_req, res) => {
+    const journey = await storage.getJourney();
+    res.json(journey);
+  });
+
+  app.get(api.locations.list.path, async (_req, res) => {
+    const locations = await storage.getLocations();
+    res.json(locations);
+  });
+
   return httpServer;
 }

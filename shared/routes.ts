@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { categories, products } from './schema';
+import { categories, products, priceTicker, milestones, locations } from './schema';
 
 export const errorSchemas = {
   notFound: z.object({ message: z.string() }),
@@ -35,6 +35,27 @@ export const api = {
         200: z.custom<typeof products.$inferSelect>(),
         404: errorSchemas.notFound
       },
+    }
+  },
+  prices: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/prices' as const,
+      responses: { 200: z.array(z.custom<typeof priceTicker.$inferSelect>()) },
+    }
+  },
+  journey: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/journey' as const,
+      responses: { 200: z.array(z.custom<typeof milestones.$inferSelect>()) },
+    }
+  },
+  locations: {
+    list: {
+      method: 'GET' as const,
+      path: '/api/locations' as const,
+      responses: { 200: z.array(z.custom<typeof locations.$inferSelect>()) },
     }
   }
 };
