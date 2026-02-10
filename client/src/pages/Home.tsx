@@ -1,6 +1,7 @@
 import { useCategories, useProducts, usePrices, useJourney, useLocations } from "@/hooks/use-groceries";
 import { Navigation } from "@/components/Navigation";
-import { useEffect, useRef } from "react";
+import { IntroLoader } from "@/components/IntroLoader";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight, Star, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
@@ -32,6 +33,9 @@ export default function Home() {
   const { data: journey } = useJourney();
   const { data: locations } = useLocations();
 
+  const [introComplete, setIntroComplete] = useState(false);
+  const handleIntroComplete = useCallback(() => setIntroComplete(true), []);
+
   const heroRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubRef = useRef<HTMLParagraphElement>(null);
@@ -44,11 +48,13 @@ export default function Home() {
   const statsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!introComplete) return;
+
     const ctx = gsap.context(() => {
       if (heroTagRef.current) {
         gsap.fromTo(heroTagRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, delay: 0.5, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out" }
         );
       }
       if (heroTitleRef.current) {
@@ -56,14 +62,14 @@ export default function Home() {
         if (lines.length > 0) {
           gsap.fromTo(lines,
             { opacity: 0, y: 80, rotateX: 20 },
-            { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.15, delay: 0.7, ease: "power4.out" }
+            { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.15, delay: 0.3, ease: "power4.out" }
           );
         }
       }
       if (heroSubRef.current) {
         gsap.fromTo(heroSubRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, delay: 1.3, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: "power3.out" }
         );
       }
       if (heroRef.current) {
@@ -91,9 +97,10 @@ export default function Home() {
       }
     });
     return () => ctx.revert();
-  }, []);
+  }, [introComplete]);
 
   useEffect(() => {
+    if (!introComplete) return;
     if (!prices?.length && !products?.length && !journey?.length && !locations?.length) return;
 
     const ctx = gsap.context(() => {
@@ -161,13 +168,14 @@ export default function Home() {
     });
 
     return () => ctx.revert();
-  }, [prices, products, journey, locations]);
+  }, [introComplete, prices, products, journey, locations]);
 
   const featuredProducts = products?.slice(0, 6) || [];
   const todayIdx = getCurrentDayIndex();
 
   return (
     <div className="min-h-screen bg-background font-body text-foreground grain-overlay">
+      {!introComplete && <IntroLoader onComplete={handleIntroComplete} />}
       <Navigation />
 
       {/* ===== HERO ===== */}
@@ -179,7 +187,7 @@ export default function Home() {
               className="inline-block text-xs md:text-sm font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 opacity-0"
               data-testid="text-hero-tag"
             >
-              Himatnagar, Gujarat &mdash; Est. 2017
+              Himatnagar, Gujarat &mdash; Since 1987
             </span>
 
             <h1
@@ -305,7 +313,7 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
-              { num: "8+", label: "Years of Service" },
+              { num: "38+", label: "Years of Service" },
               { num: "2000+", label: "Products Available" },
               { num: "5.0", label: "Google Rating" },
               { num: "10K+", label: "Happy Families" },
@@ -409,7 +417,7 @@ export default function Home() {
             <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Our Story</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-journey-title">
               Building Trust<br />
-              <span className="text-muted-foreground/50">Since 2017</span>
+              <span className="text-muted-foreground/50">Since 1987</span>
             </h2>
           </div>
 
@@ -580,7 +588,7 @@ export default function Home() {
                 Jay Kirana<span className="text-primary">.</span>
               </span>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-                Your trusted grocery destination in Himatnagar since 2017. Premium quality groceries, spices, oils, and daily essentials from trusted sources.
+                Your trusted grocery destination in Himatnagar since 1987. Premium quality groceries, spices, oils, and daily essentials from trusted sources.
               </p>
               <div className="mt-4 flex items-center gap-1.5">
                 <Star className="w-4 h-4 text-primary fill-primary" />

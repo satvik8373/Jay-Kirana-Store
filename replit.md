@@ -7,7 +7,7 @@ A single-page informational showcase website for Jay Kirana Store, Himatnagar, G
 This is a **display-only** website (no e-commerce/shopping functionality). It showcases:
 - Live market prices for essential grocery items (oils, sugar, dal, pulses)
 - Product catalog with premium imagery (6 products across 6 categories)
-- Store journey/timeline from 2017 to 2025
+- Store journey/timeline from 1987 to 2025
 - Store location, hours, and proprietor info
 - Google 5.0 rating badge
 - Official registration certificates (GST, Nagarpalika)
@@ -21,7 +21,7 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 - **Landmark**: Located in Shri Charbhuja Nasta House Building, Near Sarvoday Market
 - **Hours**: Mon-Sat 8:30 AM - 8:30 PM, Sunday 8:30 AM - 1:00 PM
 - **Google Rating**: 5.0
-- **Established**: 2017
+- **Established**: 1987
 - **GST Registered**: July 2018
 - **Nagarpalika Registration**: September 2022
 
@@ -37,13 +37,14 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 
 - **Single-page app**: All content on Home page with smooth scroll navigation
 - **Navigation**: Fixed header with section anchors (#prices, #products, #journey, #visit)
-- **Animations**: GSAP ScrollTrigger for reveal animations, parallax hero, timeline drawing, staggered cards
+- **Animations**: GSAP intro preloader with zoom-in text, ScrollTrigger for reveal animations, parallax hero, timeline drawing, staggered cards
 - **Data**: Fetched from API endpoints, seeded automatically on startup
 
 ## Key Files
 
 - `client/src/pages/Home.tsx` - Main single-page layout with all sections
 - `client/src/components/Navigation.tsx` - Fixed nav with GSAP entrance animations
+- `client/src/components/IntroLoader.tsx` - Full-screen GSAP intro preloader with zoom-in text animation
 - `client/src/index.css` - Theme, fonts, ticker animation, grain overlay
 - `client/src/hooks/use-groceries.ts` - Data fetching hooks
 - `server/storage.ts` - Database CRUD and seed data
@@ -54,7 +55,7 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 - GET /api/categories - Product categories (6 categories)
 - GET /api/products - All products (optional ?categoryId filter, 6 products)
 - GET /api/prices - Live market price ticker items (6 items)
-- GET /api/journey - Store milestones/timeline (5 milestones: 2017-2025)
+- GET /api/journey - Store milestones/timeline (5 milestones: 1987-2025)
 - GET /api/locations - Store location (single Himatnagar location)
 
 ## Design Notes

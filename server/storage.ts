@@ -87,7 +87,7 @@ export class DatabaseStorage implements IStorage {
     const existingJourney = await this.getJourney();
     if (existingJourney.length === 0) {
       await db.insert(milestones).values([
-        { year: "2017", title: "The Beginning", description: "Jay Kirana Stores was established near Sarvoday Market, Station Road, Himatnagar. Proprietor Yogeshkumar Navinchandra Patel started serving the community with everyday grocery essentials." },
+        { year: "1987", title: "The Beginning", description: "Jay Kirana Stores was founded near Sarvoday Market, Station Road, Himatnagar. What started as a small neighborhood shop grew into a trusted grocery destination for the families of Sabarkantha." },
         { year: "2018", title: "GST Registered", description: "Received official GST Registration Certificate from the Government of India, reflecting our commitment to transparent and compliant business practices." },
         { year: "2020", title: "Community Pillar", description: "During challenging times, Jay Kirana Stores became a trusted lifeline for Himatnagar families, ensuring uninterrupted supply of essential groceries and daily needs." },
         { year: "2022", title: "Municipal Recognition", description: "Received official Intimation Receipt from Himatnagar Nagarpalika, formally recognizing Jay Kirana Stores as an established business in the Sabarkantha district." },
