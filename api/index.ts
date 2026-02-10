@@ -12,7 +12,10 @@ let pool: pg.Pool | null = null;
 
 function getPool() {
   if (!pool) {
-    const connStr = process.env.DATABASE_URL!;
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL environment variable is not set");
+    }
+    const connStr = process.env.DATABASE_URL;
     const needsSsl = connStr.includes("neon.tech") ||
       connStr.includes("vercel") ||
       connStr.includes("supabase") ||
@@ -79,7 +82,24 @@ async function seedIfNeeded() {
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Add CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   try {
+    // Check environment variable first
+    if (!process.env.DATABASE_URL) {
+      return res.status(500).json({ 
+        error: "DATABASE_URL environment variable is not configured",
+        hint: "Add DATABASE_URL in Vercel project settings"
+      });
+    }
+
     const db = getDb();
     const url = req.url || "";
     // Remove /api prefix if present and normalize path
@@ -131,9 +151,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.json(data);
     }
 
-    return res.status(404).json({ message: "Not found", path });
+    return res.status(404).json({ message: "Not found", path, availableRoutes: [
+      "/categories/list",
+      "/products/list", 
+      "/prices/list",
+      "/journey/list",
+      "/locations/list"
+    ]});
   } catch (error: any) {
     console.error("API Error:", error);
-    return res.status(500).json({ message: error.message || "Internal server error", stack: error.stack });
+    return res.status(500).json({ 
+      error: "Internal server error",
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }
