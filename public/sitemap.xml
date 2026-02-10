@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://jaykirana.in/</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Category Pages -->
+  <url>
+    <loc>https://jaykirana.in/categories/spices</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/spices.png</image:loc>
+      <image:title>Premium Indian Spices</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jaykirana.in/categories/rice</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/rice.png</image:loc>
+      <image:title>Basmati and Premium Rice</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jaykirana.in/categories/dal</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/dal.png</image:loc>
+      <image:title>Fresh Dal and Pulses</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jaykirana.in/categories/oils</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/oils.png</image:loc>
+      <image:title>Cooking Oils</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jaykirana.in/categories/dry-fruits</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/dry-fruits.png</image:loc>
+      <image:title>Premium Dry Fruits</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://jaykirana.in/categories/snacks</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://jaykirana.in/images/categories/snacks.png</image:loc>
+      <image:title>Indian Snacks</image:title>
+    </image:image>
+  </url>
+
+</urlset>
