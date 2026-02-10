@@ -27,7 +27,6 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       },
     });
 
-    const nameChars = nameRef.current?.querySelectorAll(".intro-char");
     const jayChars = nameRef.current?.querySelectorAll(".intro-jay-char");
     const kiranaChars = nameRef.current?.querySelectorAll(".intro-kirana-char");
 
@@ -48,18 +47,18 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
 
     tl.fromTo(
       yearRef.current,
-      { opacity: 0, y: 20, scale: 0.8 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
       0.5
     );
 
     if (jayChars && jayChars.length > 0) {
       tl.fromTo(
         jayChars,
-        { opacity: 0, y: 80, rotateX: 90, scale: 0.5 },
+        { opacity: 0, y: 60, rotateX: 60 },
         {
-          opacity: 1, y: 0, rotateX: 0, scale: 1,
-          duration: 1, stagger: 0.06, ease: "power4.out",
+          opacity: 1, y: 0, rotateX: 0,
+          duration: 0.9, stagger: 0.05, ease: "power4.out",
         },
         0.7
       );
@@ -68,10 +67,10 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
     if (kiranaChars && kiranaChars.length > 0) {
       tl.fromTo(
         kiranaChars,
-        { opacity: 0, y: 80, rotateX: 90, scale: 0.5 },
+        { opacity: 0, y: 60, rotateX: 60 },
         {
-          opacity: 1, y: 0, rotateX: 0, scale: 1,
-          duration: 1, stagger: 0.06, ease: "power4.out",
+          opacity: 1, y: 0, rotateX: 0,
+          duration: 0.9, stagger: 0.05, ease: "power4.out",
         },
         0.9
       );
@@ -79,26 +78,26 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
 
     tl.fromTo(
       taglineRef.current,
-      { opacity: 0, y: 15, letterSpacing: "0.1em" },
-      { opacity: 1, y: 0, letterSpacing: "0.5em", duration: 0.8, ease: "power3.out" },
-      1.6
+      { opacity: 0, y: 10, letterSpacing: "0.2em" },
+      { opacity: 1, y: 0, letterSpacing: "0.5em", duration: 0.7, ease: "power3.out" },
+      1.5
     );
 
-    tl.to({}, { duration: 0.6 });
+    tl.to({}, { duration: 0.5 });
 
     tl.to(
       nameRef.current,
-      { scale: 1.15, duration: 0.5, ease: "power2.in" },
+      { scale: 1.1, duration: 0.4, ease: "power2.in" },
       "+=0"
     );
     tl.to(
       yearRef.current,
-      { opacity: 0, y: -20, duration: 0.3, ease: "power2.in" },
+      { opacity: 0, y: -15, duration: 0.3, ease: "power2.in" },
       "<"
     );
     tl.to(
       taglineRef.current,
-      { opacity: 0, y: 20, duration: 0.3, ease: "power2.in" },
+      { opacity: 0, y: 15, duration: 0.3, ease: "power2.in" },
       "<"
     );
     tl.to(
@@ -109,14 +108,14 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
 
     tl.to(
       nameRef.current,
-      { scale: 30, opacity: 0, duration: 1, ease: "power3.in" },
-      "+=0.1"
+      { scale: 20, opacity: 0, duration: 0.8, ease: "power3.in" },
+      "+=0.05"
     );
 
     tl.to(
       overlayRef.current,
-      { yPercent: -100, duration: 0.8, ease: "power4.inOut" },
-      "-=0.4"
+      { yPercent: -100, duration: 0.7, ease: "power4.inOut" },
+      "-=0.3"
     );
 
     return () => {
@@ -152,42 +151,44 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           background: "radial-gradient(ellipse 80% 60% at 50% 40%, hsl(32 80% 48% / 0.08), hsl(40 15% 97%)), hsl(40 15% 97%)",
         }}
       >
-        <span
-          ref={yearRef}
-          className="text-xs md:text-sm font-medium tracking-[0.4em] uppercase text-muted-foreground mb-6 opacity-0"
-        >
-          Since 1987
-        </span>
-
-        <div className="flex items-center gap-4 md:gap-6 mb-6">
-          <div
-            ref={lineLeftRef}
-            className="w-12 md:w-20 h-px bg-primary/40 origin-right"
-          />
-          <div
-            ref={nameRef}
-            className="text-center"
-            style={{ perspective: "1000px" }}
+        <div className="flex flex-col items-center">
+          <span
+            ref={yearRef}
+            className="text-xs md:text-sm font-medium tracking-[0.4em] uppercase text-muted-foreground mb-8 opacity-0"
           >
-            <div className="text-[clamp(3rem,12vw,10rem)] font-display leading-[0.85] tracking-tight">
-              {splitText("Jay", "intro-jay-char")}
-            </div>
-            <div className="text-[clamp(3rem,12vw,10rem)] font-display leading-[0.85] tracking-tight">
-              {splitText("Kirana", "intro-kirana-char")}
-            </div>
-          </div>
-          <div
-            ref={lineRightRef}
-            className="w-12 md:w-20 h-px bg-primary/40 origin-left"
-          />
-        </div>
+            Since 1987
+          </span>
 
-        <span
-          ref={taglineRef}
-          className="text-[10px] md:text-xs font-medium tracking-[0.5em] uppercase text-muted-foreground/70 opacity-0"
-        >
-          Store
-        </span>
+          <div className="flex items-center gap-6 md:gap-10">
+            <div
+              ref={lineLeftRef}
+              className="w-16 md:w-24 h-px bg-primary/40 origin-right"
+            />
+            <div
+              ref={nameRef}
+              className="text-center"
+              style={{ perspective: "1000px" }}
+            >
+              <div className="text-[clamp(4rem,15vw,12rem)] font-display leading-[0.9] tracking-tight">
+                {splitText("Jay", "intro-jay-char")}
+              </div>
+              <div className="text-[clamp(4rem,15vw,12rem)] font-display leading-[0.9] tracking-tight mt-1">
+                {splitText("Kirana", "intro-kirana-char")}
+              </div>
+            </div>
+            <div
+              ref={lineRightRef}
+              className="w-16 md:w-24 h-px bg-primary/40 origin-left"
+            />
+          </div>
+
+          <span
+            ref={taglineRef}
+            className="text-xs md:text-sm font-medium tracking-[0.5em] uppercase text-muted-foreground/70 mt-8 opacity-0"
+          >
+            Store
+          </span>
+        </div>
       </div>
     </div>
   );
