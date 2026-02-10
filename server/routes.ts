@@ -3,10 +3,48 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { api } from "@shared/routes";
 import { z } from "zod";
+import path from "path";
+import fs from "fs";
 
 export async function registerRoutes(httpServer: Server, app: Express): Promise<Server> {
   // Seed the database on startup
   await storage.seed();
+
+  // Serve SEO files (robots.txt, sitemap.xml, manifest.json)
+  // These files are in client/public during development and dist/public in production
+  const publicDir = process.env.NODE_ENV === "production" 
+    ? path.join(process.cwd(), "dist", "public")
+    : path.join(process.cwd(), "client", "public");
+
+  app.get("/robots.txt", (_req, res) => {
+    const robotsPath = path.join(publicDir, "robots.txt");
+    if (fs.existsSync(robotsPath)) {
+      res.type("text/plain");
+      res.sendFile(robotsPath);
+    } else {
+      res.status(404).send("robots.txt not found");
+    }
+  });
+
+  app.get("/sitemap.xml", (_req, res) => {
+    const sitemapPath = path.join(publicDir, "sitemap.xml");
+    if (fs.existsSync(sitemapPath)) {
+      res.type("application/xml");
+      res.sendFile(sitemapPath);
+    } else {
+      res.status(404).send("sitemap.xml not found");
+    }
+  });
+
+  app.get("/manifest.json", (_req, res) => {
+    const manifestPath = path.join(publicDir, "manifest.json");
+    if (fs.existsSync(manifestPath)) {
+      res.type("application/json");
+      res.sendFile(manifestPath);
+    } else {
+      res.status(404).send("manifest.json not found");
+    }
+  });
 
   app.get(api.categories.list.path, async (_req, res) => {
     const categories = await storage.getCategories();
