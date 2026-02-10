@@ -1,8 +1,25 @@
-import { useCategories, useProducts, usePrices, useJourney, useLocations } from "@/hooks/use-groceries";
+import {
+  useCategories,
+  useProducts,
+  usePrices,
+  useJourney,
+  useLocations,
+} from "@/hooks/use-groceries";
 import { Navigation } from "@/components/Navigation";
 import { IntroLoader } from "@/components/IntroLoader";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight, Star, Calendar, ChevronDown } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Minus,
+  MapPin,
+  Phone,
+  Clock,
+  ArrowUpRight,
+  Star,
+  Calendar,
+  ChevronDown,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -55,53 +72,93 @@ export default function Home() {
 
     const ctx = gsap.context(() => {
       if (heroTagRef.current) {
-        gsap.fromTo(heroTagRef.current,
+        gsap.fromTo(
+          heroTagRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out" },
         );
       }
       if (heroTitleRef.current) {
         const lines = heroTitleRef.current.querySelectorAll(".hero-line");
         if (lines.length > 0) {
-          gsap.fromTo(lines,
+          gsap.fromTo(
+            lines,
             { opacity: 0, y: 100, rotateX: 25 },
-            { opacity: 1, y: 0, rotateX: 0, duration: 1.4, stagger: 0.12, delay: 0.3, ease: "power4.out" }
+            {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              duration: 1.4,
+              stagger: 0.12,
+              delay: 0.3,
+              ease: "power4.out",
+            },
           );
         }
       }
       if (heroSubRef.current) {
-        gsap.fromTo(heroSubRef.current,
+        gsap.fromTo(
+          heroSubRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, delay: 0.9, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 1, delay: 0.9, ease: "power3.out" },
         );
       }
       if (heroBadgesRef.current) {
-        gsap.fromTo(heroBadgesRef.current,
+        gsap.fromTo(
+          heroBadgesRef.current,
           { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: "power3.out" },
         );
       }
       if (heroRef.current) {
         gsap.to(heroRef.current, {
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: 1 },
-          y: -150, opacity: 0.2,
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+          y: -150,
+          opacity: 0.2,
         });
       }
       if (statsRef.current) {
         const items = statsRef.current.querySelectorAll(".stat-item");
         if (items.length > 0) {
-          gsap.fromTo(items,
+          gsap.fromTo(
+            items,
             { opacity: 0, y: 50, scale: 0.9 },
-            { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.12, ease: "power3.out",
-              scrollTrigger: { trigger: statsRef.current, start: "top 80%", toggleActions: "play none none none" } }
+            {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              duration: 1,
+              stagger: 0.12,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: statsRef.current,
+                start: "top 80%",
+                toggleActions: "play none none none",
+              },
+            },
           );
         }
       }
       if (footerRef.current) {
-        gsap.fromTo(footerRef.current,
+        gsap.fromTo(
+          footerRef.current,
           { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 1, ease: "power3.out",
-            scrollTrigger: { trigger: footerRef.current, start: "top 90%", toggleActions: "play none none none" } }
+          {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top 90%",
+              toggleActions: "play none none none",
+            },
+          },
         );
       }
     });
@@ -110,140 +167,351 @@ export default function Home() {
 
   useEffect(() => {
     if (!introComplete) return;
-    if (!prices?.length && !products?.length && !journey?.length && !locations?.length) return;
+    if (
+      !prices?.length &&
+      !products?.length &&
+      !journey?.length &&
+      !locations?.length
+    )
+      return;
 
     const ctx = gsap.context(() => {
-      const animateSection = (ref: React.RefObject<HTMLDivElement | null>, childSelector: string, fromVars: gsap.TweenVars, toVars: gsap.TweenVars) => {
+      const animateSection = (
+        ref: React.RefObject<HTMLDivElement | null>,
+        childSelector: string,
+        fromVars: gsap.TweenVars,
+        toVars: gsap.TweenVars,
+      ) => {
         if (!ref.current) return;
         const heading = ref.current.querySelector(".section-heading");
         if (heading) {
           const tag = heading.querySelector(".section-tag");
           const h2 = heading.querySelector("h2");
           const desc = heading.querySelector(".section-desc");
-          
+
           if (tag) {
-            gsap.fromTo(tag, { opacity: 0, x: -30 },
-              { opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
-                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              tag,
+              { opacity: 0, x: -30 },
+              {
+                opacity: 1,
+                x: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: ref.current,
+                  start: "top 85%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
           if (h2) {
-            gsap.fromTo(h2, { opacity: 0, y: 60 },
-              { opacity: 1, y: 0, duration: 1.2, ease: "power4.out",
-                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              h2,
+              { opacity: 0, y: 60 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: "power4.out",
+                scrollTrigger: {
+                  trigger: ref.current,
+                  start: "top 85%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
           if (desc) {
-            gsap.fromTo(desc, { opacity: 0, y: 30 },
-              { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out",
-                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              desc,
+              { opacity: 0, y: 30 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                delay: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: ref.current,
+                  start: "top 85%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
         }
         const els = ref.current.querySelectorAll(childSelector);
         if (els.length > 0) {
-          gsap.fromTo(els, fromVars,
-            { ...toVars,
-              scrollTrigger: { trigger: ref.current, start: "top 75%", toggleActions: "play none none none" } });
+          gsap.fromTo(els, fromVars, {
+            ...toVars,
+            scrollTrigger: {
+              trigger: ref.current,
+              start: "top 75%",
+              toggleActions: "play none none none",
+            },
+          });
         }
       };
 
       if (prices?.length) {
-        animateSection(pricesRef, ".price-card",
+        animateSection(
+          pricesRef,
+          ".price-card",
           { opacity: 0, y: 60, scale: 0.92 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.9, stagger: 0.08, ease: "power3.out" });
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 0.9,
+            stagger: 0.08,
+            ease: "power3.out",
+          },
+        );
       }
 
       if (products?.length) {
-        animateSection(productsRef, ".product-item",
+        animateSection(
+          productsRef,
+          ".product-item",
           { opacity: 0, y: 80, rotateX: 5 },
-          { opacity: 1, y: 0, rotateX: 0, duration: 1.1, stagger: 0.1, ease: "power4.out" });
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 1.1,
+            stagger: 0.1,
+            ease: "power4.out",
+          },
+        );
       }
 
       if (journey?.length && journeyRef.current) {
         if (journeyHeadingRef.current) {
           const tag = journeyHeadingRef.current.querySelector(".section-tag");
-          const titleWords = journeyHeadingRef.current.querySelectorAll(".journey-title-word");
-          const subtext = journeyHeadingRef.current.querySelector(".journey-subtext");
+          const titleWords = journeyHeadingRef.current.querySelectorAll(
+            ".journey-title-word",
+          );
+          const subtext =
+            journeyHeadingRef.current.querySelector(".journey-subtext");
 
           if (tag) {
-            gsap.fromTo(tag, { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
-                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 85%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              tag,
+              { opacity: 0, y: 20 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: journeyHeadingRef.current,
+                  start: "top 85%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
           if (titleWords.length > 0) {
-            gsap.fromTo(titleWords,
+            gsap.fromTo(
+              titleWords,
               { opacity: 0, y: 100, rotateX: 30 },
-              { opacity: 1, y: 0, rotateX: 0, duration: 1.4, stagger: 0.15, ease: "power4.out",
-                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 80%", toggleActions: "play none none none" } });
+              {
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                duration: 1.4,
+                stagger: 0.15,
+                ease: "power4.out",
+                scrollTrigger: {
+                  trigger: journeyHeadingRef.current,
+                  start: "top 80%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
           if (subtext) {
-            gsap.fromTo(subtext, { opacity: 0, y: 20 },
-              { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: "power3.out",
-                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 80%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              subtext,
+              { opacity: 0, y: 20 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                delay: 0.4,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: journeyHeadingRef.current,
+                  start: "top 80%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
         }
 
-        const progressFill = journeyRef.current.querySelector(".timeline-progress-fill");
+        const progressFill = journeyRef.current.querySelector(
+          ".timeline-progress-fill",
+        );
         if (progressFill) {
-          gsap.fromTo(progressFill, { height: "0%" },
-            { height: "100%", ease: "none",
-              scrollTrigger: { trigger: journeyRef.current, start: "top 60%", end: "bottom 40%", scrub: 1 } });
+          gsap.fromTo(
+            progressFill,
+            { height: "0%" },
+            {
+              height: "100%",
+              ease: "none",
+              scrollTrigger: {
+                trigger: journeyRef.current,
+                start: "top 60%",
+                end: "bottom 40%",
+                scrub: 1,
+              },
+            },
+          );
         }
 
         const cards = journeyRef.current.querySelectorAll(".journey-card");
         cards.forEach((card, i) => {
           const yearEl = card.querySelector(".journey-year-display");
           const contentEl = card.querySelector(".journey-content");
-          const dotEl = card.closest(".journey-milestone")?.querySelector(".timeline-dot");
+          const dotEl = card
+            .closest(".journey-milestone")
+            ?.querySelector(".timeline-dot");
           const giantYear = card.querySelector(".journey-year-giant");
 
           if (dotEl) {
-            gsap.fromTo(dotEl, { scale: 0, opacity: 0 },
-              { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(3)",
-                scrollTrigger: { trigger: card, start: "top 80%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              dotEl,
+              { scale: 0, opacity: 0 },
+              {
+                scale: 1,
+                opacity: 1,
+                duration: 0.6,
+                ease: "back.out(3)",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 80%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
 
           if (giantYear) {
-            gsap.fromTo(giantYear, { opacity: 0, x: 50 },
-              { opacity: 0.06, x: 0, duration: 1.5, ease: "power3.out",
-                scrollTrigger: { trigger: card, start: "top 80%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              giantYear,
+              { opacity: 0, x: 50 },
+              {
+                opacity: 0.06,
+                x: 0,
+                duration: 1.5,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 80%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
 
           if (yearEl) {
-            gsap.fromTo(yearEl,
+            gsap.fromTo(
+              yearEl,
               { opacity: 0, scale: 0.5 },
-              { opacity: 1, scale: 1, duration: 1, ease: "power4.out",
-                scrollTrigger: { trigger: card, start: "top 82%", toggleActions: "play none none none" } });
+              {
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                ease: "power4.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 82%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
 
           if (contentEl) {
-            gsap.fromTo(contentEl,
+            gsap.fromTo(
+              contentEl,
               { opacity: 0, y: 40, x: i % 2 === 0 ? -30 : 30 },
-              { opacity: 1, y: 0, x: 0, duration: 1.2, ease: "power3.out",
-                scrollTrigger: { trigger: card, start: "top 78%", toggleActions: "play none none none" } });
+              {
+                opacity: 1,
+                y: 0,
+                x: 0,
+                duration: 1.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: card,
+                  start: "top 78%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
         });
 
         if (certsRef.current) {
           const certHeading = certsRef.current.querySelector(".cert-heading");
           const certCards = certsRef.current.querySelectorAll(".cert-card");
-          
+
           if (certHeading) {
-            gsap.fromTo(certHeading, { opacity: 0, y: 40 },
-              { opacity: 1, y: 0, duration: 1, ease: "power3.out",
-                scrollTrigger: { trigger: certsRef.current, start: "top 85%", toggleActions: "play none none none" } });
+            gsap.fromTo(
+              certHeading,
+              { opacity: 0, y: 40 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: certsRef.current,
+                  start: "top 85%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
           if (certCards.length > 0) {
-            gsap.fromTo(certCards,
+            gsap.fromTo(
+              certCards,
               { opacity: 0, y: 60, scale: 0.95 },
-              { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.2, ease: "power3.out",
-                scrollTrigger: { trigger: certsRef.current, start: "top 75%", toggleActions: "play none none none" } });
+              {
+                opacity: 1,
+                y: 0,
+                scale: 1,
+                duration: 1,
+                stagger: 0.2,
+                ease: "power3.out",
+                scrollTrigger: {
+                  trigger: certsRef.current,
+                  start: "top 75%",
+                  toggleActions: "play none none none",
+                },
+              },
+            );
           }
         }
       }
 
       if (locations?.length) {
-        animateSection(locationsRef, ".location-card",
+        animateSection(
+          locationsRef,
+          ".location-card",
           { opacity: 0, y: 60, scale: 0.96 },
-          { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.15, ease: "power3.out" });
+          {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out",
+          },
+        );
       }
     });
 
@@ -259,7 +527,10 @@ export default function Home() {
       <Navigation />
 
       {/* ===== HERO ===== */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center hero-gradient overflow-hidden">
+      <section
+        ref={heroRef}
+        className="relative min-h-screen flex items-center justify-center hero-gradient overflow-hidden"
+      >
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 w-full pt-24 pb-20">
           <div className="max-w-5xl">
             <span
@@ -277,10 +548,16 @@ export default function Home() {
               data-testid="text-hero-title"
               style={{ perspective: "1000px" }}
             >
-              <span className="hero-line block overflow-hidden"><span className="inline-block">Jay Kirana</span></span>
-              <span className="hero-line block overflow-hidden"><em className="text-primary inline-block">Store</em></span>
+              <span className="hero-line block overflow-hidden">
+                <span className="inline-block">Jay Kirana</span>
+              </span>
+              <span className="hero-line block overflow-hidden">
+                <em className="text-primary inline-block">Store</em>
+              </span>
               <span className="hero-line block overflow-hidden text-muted-foreground/60 text-[clamp(1.5rem,4vw,4rem)]">
-                <span className="inline-block">Your trusted grocery destination.</span>
+                <span className="inline-block">
+                  Your trusted grocery destination.
+                </span>
               </span>
             </h1>
 
@@ -289,17 +566,28 @@ export default function Home() {
               className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed opacity-0"
               data-testid="text-hero-subtitle"
             >
-              Serving the families of Himatnagar with authentic groceries, fresh spices, 
-              oils, dal, and daily essentials. Proprietor: Yogeshkumar Navinchandra Patel.
+              Serving the families of Himatnagar with authentic groceries, fresh
+              spices, oils, dal, and daily essentials.
             </p>
 
-            <div ref={heroBadgesRef} className="mt-8 flex items-center gap-4 flex-wrap opacity-0">
-              <div className="flex items-center gap-1.5 bg-primary/10 px-4 py-2 rounded-md" data-testid="badge-google-rating">
+            <div
+              ref={heroBadgesRef}
+              className="mt-8 flex items-center gap-4 flex-wrap opacity-0"
+            >
+              <div
+                className="flex items-center gap-1.5 bg-primary/10 px-4 py-2 rounded-md"
+                data-testid="badge-google-rating"
+              >
                 <Star className="w-4 h-4 text-primary fill-primary" />
                 <span className="font-display text-lg font-semibold">5.0</span>
-                <span className="text-xs text-muted-foreground ml-1">Google Rating</span>
+                <span className="text-xs text-muted-foreground ml-1">
+                  Google Rating
+                </span>
               </div>
-              <div className="flex items-center gap-1.5 text-sm text-muted-foreground" data-testid="text-hero-location">
+              <div
+                className="flex items-center gap-1.5 text-sm text-muted-foreground"
+                data-testid="text-hero-location"
+              >
                 <MapPin className="w-4 h-4" />
                 Station Road, Himatnagar
               </div>
@@ -316,15 +604,36 @@ export default function Home() {
       {/* ===== LIVE PRICE TICKER ===== */}
       <section className="py-4 border-y border-border/60 bg-card/50 overflow-hidden">
         <div className="ticker-track gap-8">
-          {[...(prices || []), ...(prices || []), ...(prices || []), ...(prices || [])].map((item, idx) => (
-            <div key={idx} className="flex items-center gap-6 px-6 shrink-0" data-testid={`ticker-item-${idx}`}>
-              <span className="font-medium text-sm whitespace-nowrap">{item.itemName}</span>
-              <span className="font-display text-lg font-semibold whitespace-nowrap">₹{item.price}</span>
-              <span className="text-xs text-muted-foreground whitespace-nowrap">/{item.unit}</span>
-              <span className={cn(
-                "flex items-center gap-0.5",
-                item.trend === "up" ? "text-red-500" : item.trend === "down" ? "text-green-600" : "text-muted-foreground"
-              )}>
+          {[
+            ...(prices || []),
+            ...(prices || []),
+            ...(prices || []),
+            ...(prices || []),
+          ].map((item, idx) => (
+            <div
+              key={idx}
+              className="flex items-center gap-6 px-6 shrink-0"
+              data-testid={`ticker-item-${idx}`}
+            >
+              <span className="font-medium text-sm whitespace-nowrap">
+                {item.itemName}
+              </span>
+              <span className="font-display text-lg font-semibold whitespace-nowrap">
+                ₹{item.price}
+              </span>
+              <span className="text-xs text-muted-foreground whitespace-nowrap">
+                /{item.unit}
+              </span>
+              <span
+                className={cn(
+                  "flex items-center gap-0.5",
+                  item.trend === "up"
+                    ? "text-red-500"
+                    : item.trend === "down"
+                      ? "text-green-600"
+                      : "text-muted-foreground",
+                )}
+              >
                 {item.trend === "up" && <TrendingUp className="w-3 h-3" />}
                 {item.trend === "down" && <TrendingDown className="w-3 h-3" />}
                 {item.trend === "stable" && <Minus className="w-3 h-3" />}
@@ -343,8 +652,12 @@ export default function Home() {
               <span className="w-6 h-px bg-primary/50" />
               Live Rates
             </span>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-prices-title">
-              Today&apos;s Market<br />
+            <h2
+              className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]"
+              data-testid="text-prices-title"
+            >
+              Today&apos;s Market
+              <br />
               <span className="text-muted-foreground/50">Prices</span>
             </h2>
           </div>
@@ -358,30 +671,51 @@ export default function Home() {
               >
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <div>
-                    <h3 className="font-body font-semibold text-base mb-1">{item.itemName}</h3>
-                    <p className="text-xs text-muted-foreground tracking-wide">{item.unit}</p>
+                    <h3 className="font-body font-semibold text-base mb-1">
+                      {item.itemName}
+                    </h3>
+                    <p className="text-xs text-muted-foreground tracking-wide">
+                      {item.unit}
+                    </p>
                   </div>
-                  <div className={cn(
-                    "w-8 h-8 rounded-md flex items-center justify-center",
-                    item.trend === "up" ? "bg-red-50 text-red-500" :
-                    item.trend === "down" ? "bg-green-50 text-green-600" :
-                    "bg-muted text-muted-foreground"
-                  )}>
+                  <div
+                    className={cn(
+                      "w-8 h-8 rounded-md flex items-center justify-center",
+                      item.trend === "up"
+                        ? "bg-red-50 text-red-500"
+                        : item.trend === "down"
+                          ? "bg-green-50 text-green-600"
+                          : "bg-muted text-muted-foreground",
+                    )}
+                  >
                     {item.trend === "up" && <TrendingUp className="w-4 h-4" />}
-                    {item.trend === "down" && <TrendingDown className="w-4 h-4" />}
+                    {item.trend === "down" && (
+                      <TrendingDown className="w-4 h-4" />
+                    )}
                     {item.trend === "stable" && <Minus className="w-4 h-4" />}
                   </div>
                 </div>
-                <div className="font-display text-4xl md:text-5xl" data-testid={`text-price-value-${item.id}`}>
+                <div
+                  className="font-display text-4xl md:text-5xl"
+                  data-testid={`text-price-value-${item.id}`}
+                >
                   ₹{item.price}
                 </div>
-                <div className={cn(
-                  "mt-3 text-xs font-medium uppercase tracking-wider",
-                  item.trend === "up" ? "text-red-500" :
-                  item.trend === "down" ? "text-green-600" :
-                  "text-muted-foreground"
-                )}>
-                  {item.trend === "up" ? "Price Rising" : item.trend === "down" ? "Price Falling" : "Stable"}
+                <div
+                  className={cn(
+                    "mt-3 text-xs font-medium uppercase tracking-wider",
+                    item.trend === "up"
+                      ? "text-red-500"
+                      : item.trend === "down"
+                        ? "text-green-600"
+                        : "text-muted-foreground",
+                  )}
+                >
+                  {item.trend === "up"
+                    ? "Price Rising"
+                    : item.trend === "down"
+                      ? "Price Falling"
+                      : "Stable"}
                 </div>
               </div>
             ))}
@@ -406,10 +740,18 @@ export default function Home() {
               { num: "10K+", label: "Happy Families" },
             ].map((stat, i) => (
               <div key={i} className="stat-item text-center md:text-left">
-                <div className="font-display text-4xl md:text-5xl lg:text-6xl mb-2 stat-counter" data-testid={`text-stat-${i}`}>
+                <div
+                  className="font-display text-4xl md:text-5xl lg:text-6xl mb-2 stat-counter"
+                  data-testid={`text-stat-${i}`}
+                >
                   {stat.num}
                 </div>
-                <div className="text-sm text-muted-foreground tracking-wide" data-testid={`text-stat-label-${i}`}>{stat.label}</div>
+                <div
+                  className="text-sm text-muted-foreground tracking-wide"
+                  data-testid={`text-stat-label-${i}`}
+                >
+                  {stat.label}
+                </div>
               </div>
             ))}
           </div>
@@ -426,13 +768,18 @@ export default function Home() {
                 <span className="w-6 h-px bg-primary/50" />
                 Our Collection
               </span>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-products-title">
-                Premium<br />
+              <h2
+                className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]"
+                data-testid="text-products-title"
+              >
+                Premium
+                <br />
                 <span className="text-muted-foreground/50">Selection</span>
               </h2>
             </div>
             <p className="section-desc text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
-              Hand-picked essentials from trusted farms and suppliers across India. Quality guaranteed with every purchase at Jay Kirana Store.
+              Hand-picked essentials from trusted farms and suppliers across
+              India. Quality guaranteed with every purchase at Jay Kirana Store.
             </p>
           </div>
 
@@ -447,18 +794,26 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row">
                   <div className="sm:w-2/5 aspect-square sm:aspect-auto bg-secondary/30 relative overflow-hidden p-8 flex items-center justify-center">
                     <img
-                      src={product.imageUrl.startsWith("/") ? product.imageUrl : `/images/products/${product.imageUrl}`}
+                      src={
+                        product.imageUrl.startsWith("/")
+                          ? product.imageUrl
+                          : `/images/products/${product.imageUrl}`
+                      }
                       alt={product.name}
                       className="w-full h-full object-contain smooth-img"
                       onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&auto=format&fit=crop&q=60";
+                        e.currentTarget.src =
+                          "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&auto=format&fit=crop&q=60";
                       }}
                     />
                   </div>
                   <div className="flex-1 p-6 md:p-8 flex flex-col justify-between">
                     <div>
                       <div className="flex items-start justify-between gap-4 mb-4">
-                        <h3 className="font-display text-2xl md:text-3xl leading-tight" data-testid={`text-product-name-${product.id}`}>
+                        <h3
+                          className="font-display text-2xl md:text-3xl leading-tight"
+                          data-testid={`text-product-name-${product.id}`}
+                        >
                           {product.name}
                         </h3>
                         <ArrowUpRight className="w-5 h-5 text-muted-foreground/30 group-hover:text-primary transition-colors shrink-0 mt-1" />
@@ -468,7 +823,10 @@ export default function Home() {
                       </p>
                     </div>
                     <div className="flex items-end justify-between gap-4 flex-wrap">
-                      <div className="font-display text-3xl" data-testid={`text-product-price-${product.id}`}>
+                      <div
+                        className="font-display text-3xl"
+                        data-testid={`text-product-price-${product.id}`}
+                      >
                         ₹{product.price}
                       </div>
                       {product.isPopular && (
@@ -504,17 +862,27 @@ export default function Home() {
 
       {/* ===== JOURNEY TIMELINE — REDESIGNED ===== */}
       <div className="section-divider" />
-      <section id="journey" ref={journeyRef} className="py-32 md:py-44 journey-gradient relative overflow-hidden">
+      <section
+        id="journey"
+        ref={journeyRef}
+        className="py-32 md:py-44 journey-gradient relative overflow-hidden"
+      >
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          
           {/* Journey Heading — Cinematic */}
-          <div ref={journeyHeadingRef} className="mb-24 md:mb-36 text-center relative">
+          <div
+            ref={journeyHeadingRef}
+            className="mb-24 md:mb-36 text-center relative"
+          >
             <span className="section-tag text-xs font-medium tracking-[0.3em] uppercase text-primary mb-6 flex items-center justify-center gap-3">
               <span className="w-8 h-px bg-primary/40" />
               Our Story
               <span className="w-8 h-px bg-primary/40" />
             </span>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display leading-[0.95] tracking-tight" data-testid="text-journey-title" style={{ perspective: "1000px" }}>
+            <h2
+              className="text-5xl md:text-7xl lg:text-8xl font-display leading-[0.95] tracking-tight"
+              data-testid="text-journey-title"
+              style={{ perspective: "1000px" }}
+            >
               <span className="journey-title-word block overflow-hidden">
                 <span className="inline-block">Building</span>
               </span>
@@ -526,8 +894,9 @@ export default function Home() {
               </span>
             </h2>
             <p className="journey-subtext mt-8 text-sm md:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
-              From a humble neighborhood shop to Himatnagar&apos;s most trusted grocery destination — 
-              a journey of dedication, authenticity, and unwavering service.
+              From a humble neighborhood shop to Himatnagar&apos;s most trusted
+              grocery destination — a journey of dedication, authenticity, and
+              unwavering service.
             </p>
           </div>
 
@@ -546,15 +915,19 @@ export default function Home() {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
                   </div>
 
-                  <div className={cn(
-                    "journey-card relative",
-                    idx % 2 === 0 ? "md:pr-[55%]" : "md:pl-[55%]"
-                  )}>
+                  <div
+                    className={cn(
+                      "journey-card relative",
+                      idx % 2 === 0 ? "md:pr-[55%]" : "md:pl-[55%]",
+                    )}
+                  >
                     {/* Giant Background Year */}
-                    <div className={cn(
-                      "journey-year-giant hidden md:block",
-                      idx % 2 === 0 ? "right-[5%]" : "left-[5%] right-auto"
-                    )}>
+                    <div
+                      className={cn(
+                        "journey-year-giant hidden md:block",
+                        idx % 2 === 0 ? "right-[5%]" : "left-[5%] right-auto",
+                      )}
+                    >
                       {milestone.year}
                     </div>
 
@@ -562,18 +935,26 @@ export default function Home() {
                     <div className="journey-card-premium bg-card/80 backdrop-blur-sm border border-border/40 rounded-md overflow-hidden">
                       {/* Year Header Bar */}
                       <div className="px-6 md:px-8 py-4 border-b border-border/30 flex items-center gap-4">
-                        <span className="journey-year-display font-display text-3xl md:text-4xl text-primary" data-testid={`text-milestone-year-${milestone.id}`}>
+                        <span
+                          className="journey-year-display font-display text-3xl md:text-4xl text-primary"
+                          data-testid={`text-milestone-year-${milestone.id}`}
+                        >
                           {milestone.year}
                         </span>
                         <div className="h-px flex-1 bg-gradient-to-r from-border/60 to-transparent" />
                         <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60">
-                          {idx === 0 ? "Founded" : `Year ${parseInt(milestone.year) - 1987 + 1}`}
+                          {idx === 0
+                            ? "Founded"
+                            : `Year ${parseInt(milestone.year) - 1987 + 1}`}
                         </span>
                       </div>
-                      
+
                       {/* Content */}
                       <div className="journey-content p-6 md:p-8">
-                        <h3 className="font-display text-xl md:text-2xl mb-3 leading-tight" data-testid={`text-milestone-title-${milestone.id}`}>
+                        <h3
+                          className="font-display text-xl md:text-2xl mb-3 leading-tight"
+                          data-testid={`text-milestone-title-${milestone.id}`}
+                        >
                           {milestone.title}
                         </h3>
                         <p className="text-sm text-muted-foreground leading-relaxed">
@@ -595,38 +976,68 @@ export default function Home() {
                 Verified Business
                 <span className="w-6 h-px bg-primary/40" />
               </span>
-              <h3 className="text-3xl md:text-4xl lg:text-5xl font-display" data-testid="text-certifications-title">
+              <h3
+                className="text-3xl md:text-4xl lg:text-5xl font-display"
+                data-testid="text-certifications-title"
+              >
                 Official Registrations
               </h3>
               <p className="mt-4 text-sm text-muted-foreground max-w-md mx-auto">
-                Government-verified and municipality-recognized — our credentials speak for our commitment to transparent business.
+                Government-verified and municipality-recognized — our
+                credentials speak for our commitment to transparent business.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden" data-testid="card-gst-cert">
+              <div
+                className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden"
+                data-testid="card-gst-cert"
+              >
                 <div className="aspect-[4/3] overflow-hidden bg-secondary/20 p-6 flex items-center justify-center">
-                  <img src={registrationImg} alt="GST Registration Certificate" className="w-full h-full object-contain rounded-md" />
+                  <img
+                    src={registrationImg}
+                    alt="GST Registration Certificate"
+                    className="w-full h-full object-contain rounded-md"
+                  />
                 </div>
                 <div className="p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">Verified</span>
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">
+                      Verified
+                    </span>
                   </div>
-                  <h4 className="font-display text-lg mb-1">GST Registration Certificate</h4>
-                  <p className="text-xs text-muted-foreground">Government of India &mdash; Issued July 2018</p>
+                  <h4 className="font-display text-lg mb-1">
+                    GST Registration Certificate
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Government of India &mdash; Issued July 2018
+                  </p>
                 </div>
               </div>
-              <div className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden" data-testid="card-nagarpalika-cert">
+              <div
+                className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden"
+                data-testid="card-nagarpalika-cert"
+              >
                 <div className="aspect-[4/3] overflow-hidden bg-secondary/20 p-6 flex items-center justify-center">
-                  <img src={intimationImg} alt="Himatnagar Nagarpalika Intimation Receipt" className="w-full h-full object-contain rounded-md" />
+                  <img
+                    src={intimationImg}
+                    alt="Himatnagar Nagarpalika Intimation Receipt"
+                    className="w-full h-full object-contain rounded-md"
+                  />
                 </div>
                 <div className="p-6 md:p-8">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">Verified</span>
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">
+                      Verified
+                    </span>
                   </div>
-                  <h4 className="font-display text-lg mb-1">Nagarpalika Intimation Receipt</h4>
-                  <p className="text-xs text-muted-foreground">Himatnagar Nagarpalika &mdash; September 2022</p>
+                  <h4 className="font-display text-lg mb-1">
+                    Nagarpalika Intimation Receipt
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    Himatnagar Nagarpalika &mdash; September 2022
+                  </p>
                 </div>
               </div>
             </div>
@@ -644,25 +1055,38 @@ export default function Home() {
                 <span className="w-6 h-px bg-primary/50" />
                 Visit Us
               </span>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-locations-title">
-                Our{" "}<br className="md:hidden" />
+              <h2
+                className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]"
+                data-testid="text-locations-title"
+              >
+                Our <br className="md:hidden" />
                 <span className="text-muted-foreground/50">Store</span>
               </h2>
             </div>
             <p className="section-desc text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
-              Located in the heart of Himatnagar near Sarvoday Market. Drop by for the freshest produce and a warm, personalized shopping experience.
+              Located in the heart of Himatnagar near Sarvoday Market. Drop by
+              for the freshest produce and a warm, personalized shopping
+              experience.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Store Details Card */}
-            <div className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10" data-testid="card-location-1">
+            <div
+              className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10"
+              data-testid="card-location-1"
+            >
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-md bg-primary/8 flex items-center justify-center text-primary">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-display text-2xl" data-testid="text-location-name-1">Jay Kirana Store</h3>
+                  <h3
+                    className="font-display text-2xl"
+                    data-testid="text-location-name-1"
+                  >
+                    Jay Kirana Store
+                  </h3>
                   <div className="flex items-center gap-1 mt-0.5">
                     <Star className="w-3 h-3 text-primary fill-primary" />
                     <span className="text-xs font-medium">5.0 on Google</span>
@@ -673,31 +1097,54 @@ export default function Home() {
               <div className="space-y-4 mb-8">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                  <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-store-address">
-                    01, Station Rd, opp. Char Bhujah Nasta House, Ganotri Society, Himatnagar, Gujarat 383001
+                  <p
+                    className="text-sm text-muted-foreground leading-relaxed"
+                    data-testid="text-store-address"
+                  >
+                    01, Station Rd, opp. Char Bhujah Nasta House, Ganotri
+                    Society, Himatnagar, Gujarat 383001
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
-                  <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-store-landmark">
-                    Located in: Shri Charbhuja Nasta House Building, Near Sarvoday Market
+                  <p
+                    className="text-sm text-muted-foreground leading-relaxed"
+                    data-testid="text-store-landmark"
+                  >
+                    Located in: Shri Charbhuja Nasta House Building, Near
+                    Sarvoday Market
                   </p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3 text-sm">
-                <span className="font-medium text-foreground" data-testid="text-proprietor">Proprietor:</span>
-                <span className="text-muted-foreground">Yogeshkumar Navinchandra Patel</span>
+                <span
+                  className="font-medium text-foreground"
+                  data-testid="text-proprietor"
+                >
+                  Proprietor:
+                </span>
+                <span className="text-muted-foreground">
+                  Yogeshkumar Navinchandra Patel
+                </span>
               </div>
             </div>
 
             {/* Store Hours Card */}
-            <div className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10" data-testid="card-store-hours">
+            <div
+              className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10"
+              data-testid="card-store-hours"
+            >
               <div className="flex items-center gap-3 mb-8">
                 <div className="w-10 h-10 rounded-md bg-primary/8 flex items-center justify-center text-primary">
                   <Calendar className="w-5 h-5" />
                 </div>
-                <h3 className="font-display text-2xl" data-testid="text-hours-title">Store Hours</h3>
+                <h3
+                  className="font-display text-2xl"
+                  data-testid="text-hours-title"
+                >
+                  Store Hours
+                </h3>
               </div>
 
               <div className="space-y-0">
@@ -706,7 +1153,7 @@ export default function Home() {
                     key={item.day}
                     className={cn(
                       "flex items-center justify-between py-3 border-b border-border/40 last:border-0",
-                      idx === todayIdx && "text-primary font-medium"
+                      idx === todayIdx && "text-primary font-medium",
                     )}
                     data-testid={`text-hours-${item.day.toLowerCase()}`}
                   >
@@ -724,7 +1171,10 @@ export default function Home() {
           </div>
 
           {/* Google Maps Embed */}
-          <div className="mt-8 location-card bg-card border border-border/60 rounded-md overflow-hidden" data-testid="card-google-map">
+          <div
+            className="mt-8 location-card bg-card border border-border/60 rounded-md overflow-hidden"
+            data-testid="card-google-map"
+          >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3649.5!2d72.963!3d23.597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM1JzQ5LjIiTiA3MsKwNTcnNDcuMiJF!5e0!3m2!1sen!2sin!4v1700000000000"
               width="100%"
@@ -750,7 +1200,9 @@ export default function Home() {
                 Jay Kirana<span className="text-primary">.</span>
               </span>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-                Your trusted grocery destination in Himatnagar since 1987. Premium quality groceries, spices, oils, and daily essentials from trusted sources.
+                Your trusted grocery destination in Himatnagar since 1987.
+                Premium quality groceries, spices, oils, and daily essentials
+                from trusted sources.
               </p>
               <div className="mt-4 flex items-center gap-1.5">
                 <Star className="w-4 h-4 text-primary fill-primary" />
@@ -758,27 +1210,72 @@ export default function Home() {
               </div>
             </div>
             <div className="md:col-span-3">
-              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">Navigate</h4>
+              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">
+                Navigate
+              </h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#prices" className="hover:text-foreground transition-colors" data-testid="link-footer-prices">Market Prices</a></li>
-                <li><a href="#products" className="hover:text-foreground transition-colors" data-testid="link-footer-products">Products</a></li>
-                <li><a href="#journey" className="hover:text-foreground transition-colors" data-testid="link-footer-journey">Our Journey</a></li>
-                <li><a href="#visit" className="hover:text-foreground transition-colors" data-testid="link-footer-visit">Visit Us</a></li>
+                <li>
+                  <a
+                    href="#prices"
+                    className="hover:text-foreground transition-colors"
+                    data-testid="link-footer-prices"
+                  >
+                    Market Prices
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#products"
+                    className="hover:text-foreground transition-colors"
+                    data-testid="link-footer-products"
+                  >
+                    Products
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#journey"
+                    className="hover:text-foreground transition-colors"
+                    data-testid="link-footer-journey"
+                  >
+                    Our Journey
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#visit"
+                    className="hover:text-foreground transition-colors"
+                    data-testid="link-footer-visit"
+                  >
+                    Visit Us
+                  </a>
+                </li>
               </ul>
             </div>
             <div className="md:col-span-4">
-              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">Store Details</h4>
+              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">
+                Store Details
+              </h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li data-testid="text-footer-address">Station Rd, opp. Char Bhujah Nasta House, Himatnagar 383001</li>
-                <li data-testid="text-footer-hours">Open Mon-Sat: 8:30 AM - 8:30 PM</li>
-                <li data-testid="text-footer-sunday">Sunday: 8:30 AM - 1:00 PM</li>
-                <li data-testid="text-footer-proprietor">Prop: Yogeshkumar N. Patel</li>
+                <li data-testid="text-footer-address">
+                  Station Rd, opp. Char Bhujah Nasta House, Himatnagar 383001
+                </li>
+                <li data-testid="text-footer-hours">
+                  Open Mon-Sat: 8:30 AM - 8:30 PM
+                </li>
+                <li data-testid="text-footer-sunday">
+                  Sunday: 8:30 AM - 1:00 PM
+                </li>
+                <li data-testid="text-footer-proprietor">
+                  Prop: Yogeshkumar N. Patel
+                </li>
               </ul>
             </div>
           </div>
           <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row items-center justify-between gap-4">
             <span className="text-xs text-muted-foreground/60">
-              &copy; {new Date().getFullYear()} Jay Kirana Store. All rights reserved.
+              &copy; {new Date().getFullYear()} Jay Kirana Store. All rights
+              reserved.
             </span>
             <span className="text-xs text-muted-foreground/40">
               Himatnagar, Gujarat &mdash; An informational showcase
