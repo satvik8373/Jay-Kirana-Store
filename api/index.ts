@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import {
   categories, products, priceTicker, milestones, locations,
 } from "../shared/schema";
@@ -82,23 +82,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const db = getDb();
     const url = req.url || "";
-    const path = url.split("?")[0].replace(/\/$/, "") || "/api";
+    // Remove /api prefix if present and normalize path
+    const path = url.split("?")[0].replace(/^\/api/, "").replace(/\/$/, "") || "/";
 
     await seedIfNeeded();
 
-    if (path === "/api/categories") {
+    if (path === "/categories/list" || path === "/categories") {
       const data = await db.select().from(categories);
       return res.json(data);
     }
 
-    const catMatch = path.match(/^\/api\/categories\/([^/]+)$/);
+    const catMatch = path.match(/^\/categories\/([^/]+)$/);
     if (catMatch) {
       const [category] = await db.select().from(categories).where(eq(categories.slug, catMatch[1]));
       if (!category) return res.status(404).json({ message: "Category not found" });
       return res.json(category);
     }
 
-    if (path === "/api/products") {
+    if (path === "/products/list" || path === "/products") {
       const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
       if (categoryId) {
         const data = await db.select().from(products).where(eq(products.categoryId, categoryId));
@@ -108,31 +109,31 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.json(data);
     }
 
-    const prodMatch = path.match(/^\/api\/products\/([^/]+)$/);
+    const prodMatch = path.match(/^\/products\/([^/]+)$/);
     if (prodMatch) {
       const [product] = await db.select().from(products).where(eq(products.slug, prodMatch[1]));
       if (!product) return res.status(404).json({ message: "Product not found" });
       return res.json(product);
     }
 
-    if (path === "/api/prices") {
+    if (path === "/prices/list" || path === "/prices") {
       const data = await db.select().from(priceTicker);
       return res.json(data);
     }
 
-    if (path === "/api/journey") {
-      const data = await db.select().from(milestones).orderBy(milestones.year);
+    if (path === "/journey/list" || path === "/journey") {
+      const data = await db.select().from(milestones).orderBy(asc(milestones.year));
       return res.json(data);
     }
 
-    if (path === "/api/locations") {
+    if (path === "/locations/list" || path === "/locations") {
       const data = await db.select().from(locations);
       return res.json(data);
     }
 
-    return res.status(404).json({ message: "Not found" });
+    return res.status(404).json({ message: "Not found", path });
   } catch (error: any) {
     console.error("API Error:", error);
-    return res.status(500).json({ message: error.message || "Internal server error" });
+    return res.status(500).json({ message: error.message || "Internal server error", stack: error.stack });
   }
 }
