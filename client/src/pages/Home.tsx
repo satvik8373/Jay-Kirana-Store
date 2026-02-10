@@ -1,12 +1,29 @@
 import { useCategories, useProducts, usePrices, useJourney, useLocations } from "@/hooks/use-groceries";
 import { Navigation } from "@/components/Navigation";
 import { useEffect, useRef } from "react";
-import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight, Star, Calendar } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import registrationImg from "@assets/WhatsApp_Image_2025-12-25_at_1.22.48_PM_1770699054265.jpeg";
+import intimationImg from "@assets/WhatsApp_Image_2025-12-25_at_1.23.13_PM_1770699054264.jpeg";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const storeHours = [
+  { day: "Monday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Tuesday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Wednesday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Thursday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Friday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Saturday", hours: "8:30 AM - 8:30 PM" },
+  { day: "Sunday", hours: "8:30 AM - 1:00 PM" },
+];
+
+function getCurrentDayIndex() {
+  const d = new Date().getDay();
+  return d === 0 ? 6 : d - 1;
+}
 
 export default function Home() {
   const { data: categories } = useCategories();
@@ -146,7 +163,8 @@ export default function Home() {
     return () => ctx.revert();
   }, [prices, products, journey, locations]);
 
-  const featuredProducts = products?.slice(0, 4) || [];
+  const featuredProducts = products?.slice(0, 6) || [];
+  const todayIdx = getCurrentDayIndex();
 
   return (
     <div className="min-h-screen bg-background font-body text-foreground grain-overlay">
@@ -161,7 +179,7 @@ export default function Home() {
               className="inline-block text-xs md:text-sm font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 opacity-0"
               data-testid="text-hero-tag"
             >
-              Est. 1995 &mdash; Premium Indian Grocery
+              Himatnagar, Gujarat &mdash; Est. 2017
             </span>
 
             <h1
@@ -170,9 +188,9 @@ export default function Home() {
               data-testid="text-hero-title"
               style={{ perspective: "1000px" }}
             >
-              <span className="hero-line block">Where tradition</span>
-              <span className="hero-line block">meets <em className="text-primary">quality</em></span>
-              <span className="hero-line block text-muted-foreground/60">every single day.</span>
+              <span className="hero-line block">Jay Kirana</span>
+              <span className="hero-line block"><em className="text-primary">Store</em></span>
+              <span className="hero-line block text-muted-foreground/60 text-[clamp(1.5rem,4vw,4rem)]">Your trusted grocery destination.</span>
             </h1>
 
             <p
@@ -180,9 +198,21 @@ export default function Home() {
               className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed opacity-0"
               data-testid="text-hero-subtitle"
             >
-              Your neighborhood kirana store serving authentic Indian groceries, spices, 
-              and daily essentials with unmatched freshness and value.
+              Serving the families of Himatnagar with authentic groceries, fresh spices, 
+              oils, dal, and daily essentials. Proprietor: Yogeshkumar Navinchandra Patel.
             </p>
+
+            <div className="mt-8 flex items-center gap-4 opacity-0" ref={heroSubRef as any}>
+              <div className="flex items-center gap-1.5 bg-primary/10 px-4 py-2 rounded-md" data-testid="badge-google-rating">
+                <Star className="w-4 h-4 text-primary fill-primary" />
+                <span className="font-display text-lg font-semibold">5.0</span>
+                <span className="text-xs text-muted-foreground ml-1">Google Rating</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-sm text-muted-foreground" data-testid="text-hero-location">
+                <MapPin className="w-4 h-4" />
+                Station Road, Himatnagar
+              </div>
+            </div>
           </div>
         </div>
 
@@ -225,7 +255,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {prices?.map((item) => (
               <div
                 key={item.id}
@@ -275,10 +305,10 @@ export default function Home() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
-              { num: "30+", label: "Years of Service" },
-              { num: "5000+", label: "Products Available" },
-              { num: "3", label: "Store Locations" },
-              { num: "50K+", label: "Happy Families" },
+              { num: "8+", label: "Years of Service" },
+              { num: "2000+", label: "Products Available" },
+              { num: "5.0", label: "Google Rating" },
+              { num: "10K+", label: "Happy Families" },
             ].map((stat, i) => (
               <div key={i} className="stat-item text-center md:text-left">
                 <div className="font-display text-4xl md:text-5xl lg:text-6xl mb-2 counter-num" data-testid={`text-stat-${i}`}>
@@ -303,7 +333,7 @@ export default function Home() {
               </h2>
             </div>
             <p className="text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
-              Hand-picked essentials from trusted farms and suppliers across India. Quality guaranteed with every purchase.
+              Hand-picked essentials from trusted farms and suppliers across India. Quality guaranteed with every purchase at Jay Kirana Store.
             </p>
           </div>
 
@@ -353,7 +383,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Category pills */}
           {categories && categories.length > 0 && (
             <div className="mt-16 flex flex-wrap gap-3">
               {categories.map((cat) => (
@@ -379,8 +408,8 @@ export default function Home() {
           <div className="section-heading mb-20 md:mb-28 text-center">
             <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Our Story</span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-journey-title">
-              A Legacy of<br />
-              <span className="text-muted-foreground/50">Trust & Quality</span>
+              Building Trust<br />
+              <span className="text-muted-foreground/50">Since 2017</span>
             </h2>
           </div>
 
@@ -415,47 +444,129 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* Certifications */}
+          <div className="mt-24 md:mt-32 max-w-4xl mx-auto">
+            <div className="section-heading mb-12 text-center">
+              <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Verified Business</span>
+              <h3 className="text-2xl md:text-3xl font-display" data-testid="text-certifications-title">
+                Official Registrations
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-card border border-border/60 rounded-md p-6 text-center" data-testid="card-gst-cert">
+                <img src={registrationImg} alt="GST Registration Certificate" className="w-full rounded-md mb-4 opacity-90" />
+                <h4 className="font-body font-semibold text-sm">GST Registration Certificate</h4>
+                <p className="text-xs text-muted-foreground mt-1">Government of India - Issued July 2018</p>
+              </div>
+              <div className="bg-card border border-border/60 rounded-md p-6 text-center" data-testid="card-nagarpalika-cert">
+                <img src={intimationImg} alt="Himatnagar Nagarpalika Intimation Receipt" className="w-full rounded-md mb-4 opacity-90" />
+                <h4 className="font-body font-semibold text-sm">Nagarpalika Intimation Receipt</h4>
+                <p className="text-xs text-muted-foreground mt-1">Himatnagar Nagarpalika - September 2022</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ===== LOCATIONS ===== */}
-      <section id="locations" ref={locationsRef} className="py-28 md:py-36">
+      {/* ===== VISIT US / STORE INFO ===== */}
+      <section id="visit" ref={locationsRef} className="py-28 md:py-36">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="section-heading mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
               <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Visit Us</span>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-locations-title">
-                Our<br />
-                <span className="text-muted-foreground/50">Stores</span>
+                Our{" "}<br className="md:hidden" />
+                <span className="text-muted-foreground/50">Store</span>
               </h2>
             </div>
             <p className="text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
-              Step into any of our branches for the freshest produce and a warm, personalized shopping experience.
+              Located in the heart of Himatnagar near Sarvoday Market. Drop by for the freshest produce and a warm, personalized shopping experience.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {locations?.map((loc) => (
-              <div
-                key={loc.id}
-                className="location-card group bg-card border border-border/60 rounded-md p-8 transition-all duration-500 hover:border-primary/30"
-                data-testid={`card-location-${loc.id}`}
-              >
-                <div className="w-10 h-10 rounded-md bg-primary/8 flex items-center justify-center text-primary mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Store Details Card */}
+            <div className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10" data-testid="card-location-1">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-md bg-primary/8 flex items-center justify-center text-primary">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <h3 className="font-display text-2xl mb-3" data-testid={`text-location-name-${loc.id}`}>
-                  {loc.branchName}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-                  {loc.address}
-                </p>
-                <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                  <Phone className="w-4 h-4" />
-                  <span data-testid={`text-location-phone-${loc.id}`}>{loc.phone}</span>
+                <div>
+                  <h3 className="font-display text-2xl" data-testid="text-location-name-1">Jay Kirana Store</h3>
+                  <div className="flex items-center gap-1 mt-0.5">
+                    <Star className="w-3 h-3 text-primary fill-primary" />
+                    <span className="text-xs font-medium">5.0 on Google</span>
+                  </div>
                 </div>
               </div>
-            ))}
+
+              <div className="space-y-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                  <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-store-address">
+                    01, Station Rd, opp. Char Bhujah Nasta House, Ganotri Society, Himatnagar, Gujarat 383001
+                  </p>
+                </div>
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
+                  <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-store-landmark">
+                    Located in: Shri Charbhuja Nasta House Building, Near Sarvoday Market
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 text-sm">
+                <span className="font-medium text-foreground" data-testid="text-proprietor">Proprietor:</span>
+                <span className="text-muted-foreground">Yogeshkumar Navinchandra Patel</span>
+              </div>
+            </div>
+
+            {/* Store Hours Card */}
+            <div className="location-card bg-card border border-border/60 rounded-md p-8 md:p-10" data-testid="card-store-hours">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-10 h-10 rounded-md bg-primary/8 flex items-center justify-center text-primary">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <h3 className="font-display text-2xl" data-testid="text-hours-title">Store Hours</h3>
+              </div>
+
+              <div className="space-y-0">
+                {storeHours.map((item, idx) => (
+                  <div
+                    key={item.day}
+                    className={cn(
+                      "flex items-center justify-between py-3 border-b border-border/40 last:border-0",
+                      idx === todayIdx && "text-primary font-medium"
+                    )}
+                    data-testid={`text-hours-${item.day.toLowerCase()}`}
+                  >
+                    <span className="text-sm">{item.day}</span>
+                    <span className="text-sm">{item.hours}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+                <Clock className="w-3 h-3" />
+                <span>Today&apos;s day is highlighted</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Google Maps Embed */}
+          <div className="mt-8 location-card bg-card border border-border/60 rounded-md overflow-hidden" data-testid="card-google-map">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3649.5!2d72.963!3d23.597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjPCsDM1JzQ5LjIiTiA3MsKwNTcnNDcuMiJF!5e0!3m2!1sen!2sin!4v1700000000000"
+              width="100%"
+              height="350"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Jay Kirana Store Location"
+              className="w-full"
+            />
           </div>
         </div>
       </section>
@@ -466,11 +577,15 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
             <div className="md:col-span-5">
               <span className="font-display text-3xl block mb-4">
-                Kirana<span className="text-primary">.</span>
+                Jay Kirana<span className="text-primary">.</span>
               </span>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-sm">
-                Bringing the authentic taste of India to your kitchen since 1995. Premium quality groceries and spices from trusted sources.
+                Your trusted grocery destination in Himatnagar since 2017. Premium quality groceries, spices, oils, and daily essentials from trusted sources.
               </p>
+              <div className="mt-4 flex items-center gap-1.5">
+                <Star className="w-4 h-4 text-primary fill-primary" />
+                <span className="text-sm font-medium">5.0 rated on Google</span>
+              </div>
             </div>
             <div className="md:col-span-3">
               <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">Navigate</h4>
@@ -478,24 +593,25 @@ export default function Home() {
                 <li><a href="#prices" className="hover:text-foreground transition-colors" data-testid="link-footer-prices">Market Prices</a></li>
                 <li><a href="#products" className="hover:text-foreground transition-colors" data-testid="link-footer-products">Products</a></li>
                 <li><a href="#journey" className="hover:text-foreground transition-colors" data-testid="link-footer-journey">Our Journey</a></li>
-                <li><a href="#locations" className="hover:text-foreground transition-colors" data-testid="link-footer-locations">Store Locations</a></li>
+                <li><a href="#visit" className="hover:text-foreground transition-colors" data-testid="link-footer-visit">Visit Us</a></li>
               </ul>
             </div>
             <div className="md:col-span-4">
-              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">Contact</h4>
+              <h4 className="font-body font-semibold text-sm tracking-wide uppercase mb-4">Store Details</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li>help@kirana.store</li>
-                <li>+91 98765 43210</li>
-                <li>Mumbai, Maharashtra, India</li>
+                <li data-testid="text-footer-address">Station Rd, opp. Char Bhujah Nasta House, Himatnagar 383001</li>
+                <li data-testid="text-footer-hours">Open Mon-Sat: 8:30 AM - 8:30 PM</li>
+                <li data-testid="text-footer-sunday">Sunday: 8:30 AM - 1:00 PM</li>
+                <li data-testid="text-footer-proprietor">Prop: Yogeshkumar N. Patel</li>
               </ul>
             </div>
           </div>
           <div className="pt-8 border-t border-border/40 flex flex-col md:flex-row items-center justify-between gap-4">
             <span className="text-xs text-muted-foreground/60">
-              &copy; {new Date().getFullYear()} Kirana Store. All rights reserved.
+              &copy; {new Date().getFullYear()} Jay Kirana Store. All rights reserved.
             </span>
             <span className="text-xs text-muted-foreground/40">
-              An informational showcase
+              Himatnagar, Gujarat &mdash; An informational showcase
             </span>
           </div>
         </div>

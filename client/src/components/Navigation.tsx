@@ -6,7 +6,7 @@ const navLinks = [
   { name: "Prices", href: "#prices" },
   { name: "Products", href: "#products" },
   { name: "Journey", href: "#journey" },
-  { name: "Locations", href: "#locations" },
+  { name: "Visit Us", href: "#visit" },
 ];
 
 export function Navigation() {
@@ -74,7 +74,7 @@ export function Navigation() {
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             data-testid="link-home"
           >
-            Kirana<span className="text-primary">.</span>
+            Jay Kirana<span className="text-primary">.</span>
           </span>
 
           <div ref={linksRef} className="hidden md:flex items-center gap-10">
