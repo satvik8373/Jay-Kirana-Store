@@ -1,14 +1,17 @@
-import { useCategories, useProducts } from "@/hooks/use-groceries";
+import { useCategories, useProducts, usePrices, useJourney, useLocations } from "@/hooks/use-groceries";
 import { Navigation } from "@/components/Navigation";
 import { CategoryCard } from "@/components/CategoryCard";
 import { ProductCard } from "@/components/ProductCard";
 import { Link } from "wouter";
-import { ArrowRight, Star, Truck, ShieldCheck, Clock } from "lucide-react";
+import { ArrowRight, Star, Truck, ShieldCheck, Clock, TrendingUp, TrendingDown, Minus, MapPin, Phone } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
   const { data: categories, isLoading: isCategoriesLoading } = useCategories();
   const { data: products, isLoading: isProductsLoading } = useProducts();
+  const { data: prices } = usePrices();
+  const { data: journey } = useJourney();
+  const { data: locations } = useLocations();
 
   const featuredProducts = products?.filter(p => p.isPopular).slice(0, 4) || [];
 
@@ -43,12 +46,12 @@ export default function Home() {
                   Start Shopping
                   <ArrowRight className="w-5 h-5" />
                 </Link>
-                <Link
-                  href="/about"
+                <a
+                  href="#journey"
                   className="px-8 py-4 bg-white text-foreground border border-border rounded-full font-semibold text-lg hover:bg-secondary/50 transition-all hover:border-primary/50 w-full sm:w-auto flex items-center justify-center"
                 >
                   Our Story
-                </Link>
+                </a>
               </div>
             </motion.div>
           </div>
@@ -59,8 +62,45 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 -z-10 w-1/3 h-full bg-gradient-to-r from-primary/5 to-transparent blur-3xl opacity-50" />
       </section>
 
+      {/* Live Prices Section */}
+      <section className="py-12 bg-primary/5 border-y border-primary/10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold font-display">Today's Market Rates</h2>
+              <p className="text-sm text-muted-foreground">Live daily price updates for essential items</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {prices?.map((item) => (
+              <div key={item.id} className="bg-white p-4 rounded-2xl border border-border/50 shadow-sm flex items-center justify-between">
+                <div>
+                  <h3 className="font-semibold text-sm mb-1">{item.itemName}</h3>
+                  <p className="text-xs text-muted-foreground">{item.unit}</p>
+                </div>
+                <div className="text-right">
+                  <div className="font-bold text-lg">₹{item.price}</div>
+                  <div className={cn(
+                    "flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider",
+                    item.trend === 'up' ? "text-destructive" : item.trend === 'down' ? "text-status-online" : "text-muted-foreground"
+                  )}>
+                    {item.trend === 'up' && <TrendingUp className="w-3 h-3" />}
+                    {item.trend === 'down' && <TrendingDown className="w-3 h-3" />}
+                    {item.trend === 'stable' && <Minus className="w-3 h-3" />}
+                    {item.trend}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Grid */}
-      <section className="py-12 border-y border-border/50 bg-secondary/30">
+      <section className="py-12 border-b border-border/50 bg-secondary/30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
@@ -141,6 +181,81 @@ export default function Home() {
                 Browse Full Catalog
                 <ArrowRight className="w-4 h-4" />
               </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Journey Section */}
+      <section id="journey" className="py-24 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-16">
+            <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">Our Journey</h2>
+            <p className="text-muted-foreground text-lg">From a small corner shop to your favorite grocery destination.</p>
+          </div>
+          <div className="relative">
+            {/* Timeline Line */}
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-border hidden md:block" />
+            
+            <div className="space-y-12">
+              {journey?.map((milestone, idx) => (
+                <div key={milestone.id} className={cn(
+                  "flex flex-col md:flex-row items-center gap-8 md:gap-0",
+                  idx % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                )}>
+                  <div className="flex-1 w-full md:px-12">
+                    <div className={cn(
+                      "p-8 bg-white border border-border rounded-3xl shadow-sm hover:shadow-md transition-shadow",
+                      idx % 2 === 0 ? "md:text-right" : "md:text-left"
+                    )}>
+                      <span className="text-primary font-bold text-2xl mb-2 block">{milestone.year}</span>
+                      <h3 className="text-xl font-bold mb-4">{milestone.title}</h3>
+                      <p className="text-muted-foreground leading-relaxed">{milestone.description}</p>
+                    </div>
+                  </div>
+                  <div className="relative z-10 w-12 h-12 bg-primary rounded-full border-4 border-background flex items-center justify-center text-white font-bold shrink-0 hidden md:flex">
+                    {idx + 1}
+                  </div>
+                  <div className="flex-1 hidden md:block" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Locations Section */}
+      <section id="locations" className="py-24 bg-secondary/30">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-12">
+            <div className="flex-1">
+              <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Our Locations</h2>
+              <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+                Visit us at any of our branches for a personalized shopping experience and the freshest picks of the day.
+              </p>
+              <div className="space-y-6">
+                {locations?.map((loc) => (
+                  <div key={loc.id} className="bg-white p-6 rounded-2xl border border-border shadow-sm flex gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary shrink-0">
+                      <MapPin className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-2">{loc.branchName}</h3>
+                      <p className="text-muted-foreground text-sm mb-4">{loc.address}</p>
+                      <div className="flex items-center gap-2 text-primary font-semibold text-sm">
+                        <Phone className="w-4 h-4" />
+                        {loc.phone}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 w-full aspect-square bg-muted rounded-3xl relative overflow-hidden group">
+               <div className="absolute inset-0 bg-primary/5 flex items-center justify-center">
+                  <MapPin className="w-16 h-16 text-primary/20 animate-bounce" />
+                  <p className="absolute bottom-8 text-muted-foreground font-medium italic">Interactive Map Coming Soon</p>
+               </div>
+            </div>
           </div>
         </div>
       </section>

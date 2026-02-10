@@ -18,6 +18,8 @@ export function Navigation() {
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "Shop", href: "/shop" },
+    { name: "Journey", href: "/#journey" },
+    { name: "Locations", href: "/#locations" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
@@ -58,12 +60,6 @@ export function Navigation() {
           <div className="flex items-center gap-4">
             <button className="p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-secondary">
               <Search className="w-5 h-5" />
-            </button>
-            <button className="relative p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-secondary group">
-              <ShoppingBag className="w-5 h-5" />
-              <span className="absolute top-0 right-0 w-4 h-4 bg-primary text-white text-[10px] font-bold flex items-center justify-center rounded-full transform scale-0 group-hover:scale-100 transition-transform">
-                0
-              </span>
             </button>
             <button className="md:hidden p-2 text-muted-foreground hover:text-primary transition-colors">
               <Menu className="w-6 h-6" />

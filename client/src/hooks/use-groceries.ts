@@ -55,3 +55,36 @@ export function useProduct(slug: string) {
     enabled: !!slug,
   });
 }
+
+export function usePrices() {
+  return useQuery({
+    queryKey: [api.prices.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.prices.list.path, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch prices");
+      return api.prices.list.responses[200].parse(await res.json());
+    },
+  });
+}
+
+export function useJourney() {
+  return useQuery({
+    queryKey: [api.journey.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.journey.list.path, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch journey");
+      return api.journey.list.responses[200].parse(await res.json());
+    },
+  });
+}
+
+export function useLocations() {
+  return useQuery({
+    queryKey: [api.locations.list.path],
+    queryFn: async () => {
+      const res = await fetch(api.locations.list.path, { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch locations");
+      return api.locations.list.responses[200].parse(await res.json());
+    },
+  });
+}
