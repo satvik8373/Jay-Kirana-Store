@@ -40,7 +40,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getJourney(): Promise<Milestone[]> {
-    return await db.select().from(milestones);
+    return await db.select().from(milestones).orderBy(milestones.year);
   }
 
   async getLocations(): Promise<Location[]> {
