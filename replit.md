@@ -75,3 +75,18 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 2. Images located in `client/public/images/` (categories/ and products/ subdirectories)
 3. Attached certificate images imported via `@assets/` prefix
 4. Run `npm run dev` to start
+
+## Vercel Deployment
+
+The project includes Vercel-compatible files for deployment:
+- `vercel.json` - Build/routing configuration
+- `api/index.ts` - Serverless API function handling all endpoints
+- `server/db.ts` - Auto-detects external DB providers and enables SSL
+
+### Steps to deploy on Vercel:
+1. Push code to GitHub
+2. Import project in Vercel dashboard
+3. Create a Postgres database in Vercel (or use Neon) and copy the DATABASE_URL
+4. Add `DATABASE_URL` as an environment variable in Vercel project settings
+5. Run `npx drizzle-kit push` with the external DATABASE_URL to create tables
+6. Deploy — the API will auto-seed data on first request
