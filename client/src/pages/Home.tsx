@@ -2,7 +2,7 @@ import { useCategories, useProducts, usePrices, useJourney, useLocations } from 
 import { Navigation } from "@/components/Navigation";
 import { IntroLoader } from "@/components/IntroLoader";
 import { useEffect, useRef, useState, useCallback } from "react";
-import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight, Star, Calendar } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, MapPin, Phone, Clock, ArrowUpRight, Star, Calendar, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -40,12 +40,15 @@ export default function Home() {
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroSubRef = useRef<HTMLParagraphElement>(null);
   const heroTagRef = useRef<HTMLSpanElement>(null);
+  const heroBadgesRef = useRef<HTMLDivElement>(null);
   const pricesRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   const journeyRef = useRef<HTMLDivElement>(null);
+  const journeyHeadingRef = useRef<HTMLDivElement>(null);
   const locationsRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
+  const certsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!introComplete) return;
@@ -61,29 +64,35 @@ export default function Home() {
         const lines = heroTitleRef.current.querySelectorAll(".hero-line");
         if (lines.length > 0) {
           gsap.fromTo(lines,
-            { opacity: 0, y: 80, rotateX: 20 },
-            { opacity: 1, y: 0, rotateX: 0, duration: 1.2, stagger: 0.15, delay: 0.3, ease: "power4.out" }
+            { opacity: 0, y: 100, rotateX: 25 },
+            { opacity: 1, y: 0, rotateX: 0, duration: 1.4, stagger: 0.12, delay: 0.3, ease: "power4.out" }
           );
         }
       }
       if (heroSubRef.current) {
         gsap.fromTo(heroSubRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 1, delay: 0.8, ease: "power3.out" }
+          { opacity: 1, y: 0, duration: 1, delay: 0.9, ease: "power3.out" }
+        );
+      }
+      if (heroBadgesRef.current) {
+        gsap.fromTo(heroBadgesRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.8, delay: 1.1, ease: "power3.out" }
         );
       }
       if (heroRef.current) {
         gsap.to(heroRef.current, {
           scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: 1 },
-          y: -100, opacity: 0.3,
+          y: -150, opacity: 0.2,
         });
       }
       if (statsRef.current) {
         const items = statsRef.current.querySelectorAll(".stat-item");
         if (items.length > 0) {
           gsap.fromTo(items,
-            { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out",
+            { opacity: 0, y: 50, scale: 0.9 },
+            { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.12, ease: "power3.out",
               scrollTrigger: { trigger: statsRef.current, start: "top 80%", toggleActions: "play none none none" } }
           );
         }
@@ -108,9 +117,25 @@ export default function Home() {
         if (!ref.current) return;
         const heading = ref.current.querySelector(".section-heading");
         if (heading) {
-          gsap.fromTo(heading, { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 1, ease: "power3.out",
-              scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+          const tag = heading.querySelector(".section-tag");
+          const h2 = heading.querySelector("h2");
+          const desc = heading.querySelector(".section-desc");
+          
+          if (tag) {
+            gsap.fromTo(tag, { opacity: 0, x: -30 },
+              { opacity: 1, x: 0, duration: 0.8, ease: "power3.out",
+                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+          }
+          if (h2) {
+            gsap.fromTo(h2, { opacity: 0, y: 60 },
+              { opacity: 1, y: 0, duration: 1.2, ease: "power4.out",
+                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+          }
+          if (desc) {
+            gsap.fromTo(desc, { opacity: 0, y: 30 },
+              { opacity: 1, y: 0, duration: 1, delay: 0.2, ease: "power3.out",
+                scrollTrigger: { trigger: ref.current, start: "top 85%", toggleActions: "play none none none" } });
+          }
         }
         const els = ref.current.querySelectorAll(childSelector);
         if (els.length > 0) {
@@ -122,48 +147,103 @@ export default function Home() {
 
       if (prices?.length) {
         animateSection(pricesRef, ".price-card",
-          { opacity: 0, y: 50, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" });
+          { opacity: 0, y: 60, scale: 0.92 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.9, stagger: 0.08, ease: "power3.out" });
       }
 
       if (products?.length) {
         animateSection(productsRef, ".product-item",
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: 0.9, stagger: 0.12, ease: "power3.out" });
+          { opacity: 0, y: 80, rotateX: 5 },
+          { opacity: 1, y: 0, rotateX: 0, duration: 1.1, stagger: 0.1, ease: "power4.out" });
       }
 
       if (journey?.length && journeyRef.current) {
-        const heading = journeyRef.current.querySelector(".section-heading");
-        if (heading) {
-          gsap.fromTo(heading, { opacity: 0, y: 40 },
-            { opacity: 1, y: 0, duration: 1, ease: "power3.out",
-              scrollTrigger: { trigger: journeyRef.current, start: "top 85%", toggleActions: "play none none none" } });
+        if (journeyHeadingRef.current) {
+          const tag = journeyHeadingRef.current.querySelector(".section-tag");
+          const titleWords = journeyHeadingRef.current.querySelectorAll(".journey-title-word");
+          const subtext = journeyHeadingRef.current.querySelector(".journey-subtext");
+
+          if (tag) {
+            gsap.fromTo(tag, { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "power3.out",
+                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 85%", toggleActions: "play none none none" } });
+          }
+          if (titleWords.length > 0) {
+            gsap.fromTo(titleWords,
+              { opacity: 0, y: 100, rotateX: 30 },
+              { opacity: 1, y: 0, rotateX: 0, duration: 1.4, stagger: 0.15, ease: "power4.out",
+                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 80%", toggleActions: "play none none none" } });
+          }
+          if (subtext) {
+            gsap.fromTo(subtext, { opacity: 0, y: 20 },
+              { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: "power3.out",
+                scrollTrigger: { trigger: journeyHeadingRef.current, start: "top 80%", toggleActions: "play none none none" } });
+          }
         }
-        const line = journeyRef.current.querySelector(".timeline-line");
-        if (line) {
-          gsap.fromTo(line, { scaleY: 0 },
-            { scaleY: 1, duration: 2, ease: "power2.inOut",
-              scrollTrigger: { trigger: journeyRef.current, start: "top 70%", end: "bottom 40%", scrub: 1 } });
+
+        const progressFill = journeyRef.current.querySelector(".timeline-progress-fill");
+        if (progressFill) {
+          gsap.fromTo(progressFill, { height: "0%" },
+            { height: "100%", ease: "none",
+              scrollTrigger: { trigger: journeyRef.current, start: "top 60%", end: "bottom 40%", scrub: 1 } });
         }
+
         const cards = journeyRef.current.querySelectorAll(".journey-card");
         cards.forEach((card, i) => {
-          gsap.fromTo(card,
-            { opacity: 0, x: i % 2 === 0 ? -60 : 60, y: 20 },
-            { opacity: 1, x: 0, y: 0, duration: 1, ease: "power3.out",
-              scrollTrigger: { trigger: card, start: "top 85%", toggleActions: "play none none none" } });
+          const yearEl = card.querySelector(".journey-year-display");
+          const contentEl = card.querySelector(".journey-content");
+          const dotEl = card.closest(".journey-milestone")?.querySelector(".timeline-dot");
+          const giantYear = card.querySelector(".journey-year-giant");
+
+          if (dotEl) {
+            gsap.fromTo(dotEl, { scale: 0, opacity: 0 },
+              { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(3)",
+                scrollTrigger: { trigger: card, start: "top 80%", toggleActions: "play none none none" } });
+          }
+
+          if (giantYear) {
+            gsap.fromTo(giantYear, { opacity: 0, x: 50 },
+              { opacity: 0.06, x: 0, duration: 1.5, ease: "power3.out",
+                scrollTrigger: { trigger: card, start: "top 80%", toggleActions: "play none none none" } });
+          }
+
+          if (yearEl) {
+            gsap.fromTo(yearEl,
+              { opacity: 0, scale: 0.5 },
+              { opacity: 1, scale: 1, duration: 1, ease: "power4.out",
+                scrollTrigger: { trigger: card, start: "top 82%", toggleActions: "play none none none" } });
+          }
+
+          if (contentEl) {
+            gsap.fromTo(contentEl,
+              { opacity: 0, y: 40, x: i % 2 === 0 ? -30 : 30 },
+              { opacity: 1, y: 0, x: 0, duration: 1.2, ease: "power3.out",
+                scrollTrigger: { trigger: card, start: "top 78%", toggleActions: "play none none none" } });
+          }
         });
-        const dots = journeyRef.current.querySelectorAll(".timeline-dot");
-        dots.forEach((dot) => {
-          gsap.fromTo(dot, { scale: 0 },
-            { scale: 1, duration: 0.5, ease: "back.out(2)",
-              scrollTrigger: { trigger: dot, start: "top 85%", toggleActions: "play none none none" } });
-        });
+
+        if (certsRef.current) {
+          const certHeading = certsRef.current.querySelector(".cert-heading");
+          const certCards = certsRef.current.querySelectorAll(".cert-card");
+          
+          if (certHeading) {
+            gsap.fromTo(certHeading, { opacity: 0, y: 40 },
+              { opacity: 1, y: 0, duration: 1, ease: "power3.out",
+                scrollTrigger: { trigger: certsRef.current, start: "top 85%", toggleActions: "play none none none" } });
+          }
+          if (certCards.length > 0) {
+            gsap.fromTo(certCards,
+              { opacity: 0, y: 60, scale: 0.95 },
+              { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.2, ease: "power3.out",
+                scrollTrigger: { trigger: certsRef.current, start: "top 75%", toggleActions: "play none none none" } });
+          }
+        }
       }
 
       if (locations?.length) {
         animateSection(locationsRef, ".location-card",
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 0.8, stagger: 0.15, ease: "power3.out" });
+          { opacity: 0, y: 60, scale: 0.96 },
+          { opacity: 1, y: 0, scale: 1, duration: 1, stagger: 0.15, ease: "power3.out" });
       }
     });
 
@@ -184,9 +264,10 @@ export default function Home() {
           <div className="max-w-5xl">
             <span
               ref={heroTagRef}
-              className="inline-block text-xs md:text-sm font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 opacity-0"
+              className="inline-flex items-center gap-3 text-xs md:text-sm font-medium tracking-[0.3em] uppercase text-muted-foreground mb-8 opacity-0"
               data-testid="text-hero-tag"
             >
+              <span className="w-8 h-px bg-primary/40" />
               Himatnagar, Gujarat &mdash; Since 1987
             </span>
 
@@ -196,9 +277,11 @@ export default function Home() {
               data-testid="text-hero-title"
               style={{ perspective: "1000px" }}
             >
-              <span className="hero-line block">Jay Kirana</span>
-              <span className="hero-line block"><em className="text-primary">Store</em></span>
-              <span className="hero-line block text-muted-foreground/60 text-[clamp(1.5rem,4vw,4rem)]">Your trusted grocery destination.</span>
+              <span className="hero-line block overflow-hidden"><span className="inline-block">Jay Kirana</span></span>
+              <span className="hero-line block overflow-hidden"><em className="text-primary inline-block">Store</em></span>
+              <span className="hero-line block overflow-hidden text-muted-foreground/60 text-[clamp(1.5rem,4vw,4rem)]">
+                <span className="inline-block">Your trusted grocery destination.</span>
+              </span>
             </h1>
 
             <p
@@ -210,7 +293,7 @@ export default function Home() {
               oils, dal, and daily essentials. Proprietor: Yogeshkumar Navinchandra Patel.
             </p>
 
-            <div className="mt-8 flex items-center gap-4 opacity-0" ref={heroSubRef as any}>
+            <div ref={heroBadgesRef} className="mt-8 flex items-center gap-4 flex-wrap opacity-0">
               <div className="flex items-center gap-1.5 bg-primary/10 px-4 py-2 rounded-md" data-testid="badge-google-rating">
                 <Star className="w-4 h-4 text-primary fill-primary" />
                 <span className="font-display text-lg font-semibold">5.0</span>
@@ -224,9 +307,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/50">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground/40">
           <span className="text-[10px] tracking-[0.3em] uppercase">Scroll</span>
-          <div className="w-px h-12 bg-gradient-to-b from-muted-foreground/30 to-transparent" />
+          <ChevronDown className="w-4 h-4 float-animation" />
         </div>
       </section>
 
@@ -256,7 +339,10 @@ export default function Home() {
       <section id="prices" ref={pricesRef} className="py-28 md:py-36">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="section-heading mb-16 md:mb-20">
-            <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Live Rates</span>
+            <span className="section-tag text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 flex items-center gap-3">
+              <span className="w-6 h-px bg-primary/50" />
+              Live Rates
+            </span>
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-prices-title">
               Today&apos;s Market<br />
               <span className="text-muted-foreground/50">Prices</span>
@@ -270,7 +356,7 @@ export default function Home() {
                 className="price-card group relative bg-card border border-border/60 rounded-md p-6 md:p-8 transition-all duration-500 hover:border-primary/30"
                 data-testid={`card-price-${item.id}`}
               >
-                <div className="flex items-start justify-between mb-6">
+                <div className="flex items-start justify-between gap-4 mb-6">
                   <div>
                     <h3 className="font-body font-semibold text-base mb-1">{item.itemName}</h3>
                     <p className="text-xs text-muted-foreground tracking-wide">{item.unit}</p>
@@ -309,7 +395,8 @@ export default function Home() {
       </section>
 
       {/* ===== STATS BANNER ===== */}
-      <section ref={statsRef} className="py-20 border-y border-border/60 bg-card/30">
+      <div className="section-divider" />
+      <section ref={statsRef} className="py-24 md:py-32 bg-card/30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
@@ -319,7 +406,7 @@ export default function Home() {
               { num: "10K+", label: "Happy Families" },
             ].map((stat, i) => (
               <div key={i} className="stat-item text-center md:text-left">
-                <div className="font-display text-4xl md:text-5xl lg:text-6xl mb-2 counter-num" data-testid={`text-stat-${i}`}>
+                <div className="font-display text-4xl md:text-5xl lg:text-6xl mb-2 stat-counter" data-testid={`text-stat-${i}`}>
                   {stat.num}
                 </div>
                 <div className="text-sm text-muted-foreground tracking-wide" data-testid={`text-stat-label-${i}`}>{stat.label}</div>
@@ -328,19 +415,23 @@ export default function Home() {
           </div>
         </div>
       </section>
+      <div className="section-divider" />
 
       {/* ===== PRODUCTS SHOWCASE ===== */}
       <section id="products" ref={productsRef} className="py-28 md:py-36">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="section-heading mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Our Collection</span>
+              <span className="section-tag text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 flex items-center gap-3">
+                <span className="w-6 h-px bg-primary/50" />
+                Our Collection
+              </span>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-products-title">
                 Premium<br />
                 <span className="text-muted-foreground/50">Selection</span>
               </h2>
             </div>
-            <p className="text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
+            <p className="section-desc text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
               Hand-picked essentials from trusted farms and suppliers across India. Quality guaranteed with every purchase at Jay Kirana Store.
             </p>
           </div>
@@ -351,6 +442,7 @@ export default function Home() {
                 key={product.id}
                 className="product-item group relative bg-card border border-border/60 rounded-md overflow-hidden transition-all duration-500 hover:border-primary/30"
                 data-testid={`card-product-${product.id}`}
+                style={{ perspective: "800px" }}
               >
                 <div className="flex flex-col sm:flex-row">
                   <div className="sm:w-2/5 aspect-square sm:aspect-auto bg-secondary/30 relative overflow-hidden p-8 flex items-center justify-center">
@@ -396,7 +488,7 @@ export default function Home() {
               {categories.map((cat) => (
                 <div
                   key={cat.id}
-                  className="px-5 py-2.5 border border-border/60 rounded-md text-sm text-muted-foreground font-medium"
+                  className="px-5 py-2.5 border border-border/60 rounded-md text-sm text-muted-foreground font-medium transition-colors duration-300 hover:border-primary/30 hover:text-foreground"
                   data-testid={`text-category-${cat.id}`}
                 >
                   {cat.name}
@@ -410,42 +502,84 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== JOURNEY TIMELINE ===== */}
-      <section id="journey" ref={journeyRef} className="py-28 md:py-36 bg-card/30 border-y border-border/60">
+      {/* ===== JOURNEY TIMELINE — REDESIGNED ===== */}
+      <div className="section-divider" />
+      <section id="journey" ref={journeyRef} className="py-32 md:py-44 journey-gradient relative overflow-hidden">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-          <div className="section-heading mb-20 md:mb-28 text-center">
-            <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Our Story</span>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-journey-title">
-              Building Trust<br />
-              <span className="text-muted-foreground/50">Since 1987</span>
+          
+          {/* Journey Heading — Cinematic */}
+          <div ref={journeyHeadingRef} className="mb-24 md:mb-36 text-center relative">
+            <span className="section-tag text-xs font-medium tracking-[0.3em] uppercase text-primary mb-6 flex items-center justify-center gap-3">
+              <span className="w-8 h-px bg-primary/40" />
+              Our Story
+              <span className="w-8 h-px bg-primary/40" />
+            </span>
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-display leading-[0.95] tracking-tight" data-testid="text-journey-title" style={{ perspective: "1000px" }}>
+              <span className="journey-title-word block overflow-hidden">
+                <span className="inline-block">Building</span>
+              </span>
+              <span className="journey-title-word block overflow-hidden">
+                <span className="inline-block text-primary">Trust</span>
+              </span>
+              <span className="journey-title-word block overflow-hidden text-muted-foreground/40 text-[clamp(2rem,5vw,5rem)]">
+                <span className="inline-block">Since 1987</span>
+              </span>
             </h2>
+            <p className="journey-subtext mt-8 text-sm md:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
+              From a humble neighborhood shop to Himatnagar&apos;s most trusted grocery destination — 
+              a journey of dedication, authenticity, and unwavering service.
+            </p>
           </div>
 
-          <div className="relative max-w-4xl mx-auto">
-            <div className="timeline-line absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-border/80 -translate-x-1/2 origin-top" style={{ transformOrigin: "top" }} />
+          {/* Timeline */}
+          <div className="relative max-w-5xl mx-auto">
+            {/* Progress Track */}
+            <div className="timeline-progress-track hidden md:block">
+              <div className="timeline-progress-fill" />
+            </div>
 
-            <div className="space-y-16 md:space-y-24">
+            <div className="space-y-20 md:space-y-32">
               {journey?.map((milestone, idx) => (
-                <div key={milestone.id} className="relative">
-                  <div className="timeline-dot absolute left-6 md:left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-primary border-4 border-background z-10" />
+                <div key={milestone.id} className="journey-milestone relative">
+                  {/* Timeline Dot */}
+                  <div className="timeline-dot hidden md:flex absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-background z-10 items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
+                  </div>
 
                   <div className={cn(
-                    "journey-card ml-16 md:ml-0",
+                    "journey-card relative",
                     idx % 2 === 0 ? "md:pr-[55%]" : "md:pl-[55%]"
                   )}>
+                    {/* Giant Background Year */}
                     <div className={cn(
-                      "bg-card border border-border/60 rounded-md p-6 md:p-8",
-                      idx % 2 === 0 ? "md:text-right" : "md:text-left"
+                      "journey-year-giant hidden md:block",
+                      idx % 2 === 0 ? "right-[5%]" : "left-[5%] right-auto"
                     )}>
-                      <span className="font-display text-3xl md:text-4xl text-primary block mb-3" data-testid={`text-milestone-year-${milestone.id}`}>
-                        {milestone.year}
-                      </span>
-                      <h3 className="font-body font-semibold text-lg mb-3" data-testid={`text-milestone-title-${milestone.id}`}>
-                        {milestone.title}
-                      </h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {milestone.description}
-                      </p>
+                      {milestone.year}
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="journey-card-premium bg-card/80 backdrop-blur-sm border border-border/40 rounded-md overflow-hidden">
+                      {/* Year Header Bar */}
+                      <div className="px-6 md:px-8 py-4 border-b border-border/30 flex items-center gap-4">
+                        <span className="journey-year-display font-display text-3xl md:text-4xl text-primary" data-testid={`text-milestone-year-${milestone.id}`}>
+                          {milestone.year}
+                        </span>
+                        <div className="h-px flex-1 bg-gradient-to-r from-border/60 to-transparent" />
+                        <span className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground/60">
+                          {idx === 0 ? "Founded" : `Year ${parseInt(milestone.year) - 1987 + 1}`}
+                        </span>
+                      </div>
+                      
+                      {/* Content */}
+                      <div className="journey-content p-6 md:p-8">
+                        <h3 className="font-display text-xl md:text-2xl mb-3 leading-tight" data-testid={`text-milestone-title-${milestone.id}`}>
+                          {milestone.title}
+                        </h3>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {milestone.description}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -453,42 +587,69 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Certifications */}
-          <div className="mt-24 md:mt-32 max-w-4xl mx-auto">
-            <div className="section-heading mb-12 text-center">
-              <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Verified Business</span>
-              <h3 className="text-2xl md:text-3xl font-display" data-testid="text-certifications-title">
+          {/* Certifications — Redesigned */}
+          <div ref={certsRef} className="mt-32 md:mt-44 max-w-5xl mx-auto">
+            <div className="cert-heading text-center mb-16">
+              <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 flex items-center justify-center gap-3">
+                <span className="w-6 h-px bg-primary/40" />
+                Verified Business
+                <span className="w-6 h-px bg-primary/40" />
+              </span>
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-display" data-testid="text-certifications-title">
                 Official Registrations
               </h3>
+              <p className="mt-4 text-sm text-muted-foreground max-w-md mx-auto">
+                Government-verified and municipality-recognized — our credentials speak for our commitment to transparent business.
+              </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-card border border-border/60 rounded-md p-6 text-center" data-testid="card-gst-cert">
-                <img src={registrationImg} alt="GST Registration Certificate" className="w-full rounded-md mb-4 opacity-90" />
-                <h4 className="font-body font-semibold text-sm">GST Registration Certificate</h4>
-                <p className="text-xs text-muted-foreground mt-1">Government of India - Issued July 2018</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden" data-testid="card-gst-cert">
+                <div className="aspect-[4/3] overflow-hidden bg-secondary/20 p-6 flex items-center justify-center">
+                  <img src={registrationImg} alt="GST Registration Certificate" className="w-full h-full object-contain rounded-md" />
+                </div>
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">Verified</span>
+                  </div>
+                  <h4 className="font-display text-lg mb-1">GST Registration Certificate</h4>
+                  <p className="text-xs text-muted-foreground">Government of India &mdash; Issued July 2018</p>
+                </div>
               </div>
-              <div className="bg-card border border-border/60 rounded-md p-6 text-center" data-testid="card-nagarpalika-cert">
-                <img src={intimationImg} alt="Himatnagar Nagarpalika Intimation Receipt" className="w-full rounded-md mb-4 opacity-90" />
-                <h4 className="font-body font-semibold text-sm">Nagarpalika Intimation Receipt</h4>
-                <p className="text-xs text-muted-foreground mt-1">Himatnagar Nagarpalika - September 2022</p>
+              <div className="cert-card cert-card-hover bg-card border border-border/40 rounded-md overflow-hidden" data-testid="card-nagarpalika-cert">
+                <div className="aspect-[4/3] overflow-hidden bg-secondary/20 p-6 flex items-center justify-center">
+                  <img src={intimationImg} alt="Himatnagar Nagarpalika Intimation Receipt" className="w-full h-full object-contain rounded-md" />
+                </div>
+                <div className="p-6 md:p-8">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-[10px] tracking-[0.2em] uppercase text-green-600 font-medium">Verified</span>
+                  </div>
+                  <h4 className="font-display text-lg mb-1">Nagarpalika Intimation Receipt</h4>
+                  <p className="text-xs text-muted-foreground">Himatnagar Nagarpalika &mdash; September 2022</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <div className="section-divider" />
 
       {/* ===== VISIT US / STORE INFO ===== */}
       <section id="visit" ref={locationsRef} className="py-28 md:py-36">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10">
           <div className="section-heading mb-16 md:mb-20 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <span className="text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 block">Visit Us</span>
+              <span className="section-tag text-xs font-medium tracking-[0.3em] uppercase text-primary mb-4 flex items-center gap-3">
+                <span className="w-6 h-px bg-primary/50" />
+                Visit Us
+              </span>
               <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.05]" data-testid="text-locations-title">
                 Our{" "}<br className="md:hidden" />
                 <span className="text-muted-foreground/50">Store</span>
               </h2>
             </div>
-            <p className="text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
+            <p className="section-desc text-muted-foreground max-w-sm text-sm leading-relaxed md:pb-2">
               Located in the heart of Himatnagar near Sarvoday Market. Drop by for the freshest produce and a warm, personalized shopping experience.
             </p>
           </div>
@@ -580,7 +741,8 @@ export default function Home() {
       </section>
 
       {/* ===== FOOTER ===== */}
-      <footer ref={footerRef} className="border-t border-border/60 bg-card/30">
+      <div className="section-divider" />
+      <footer ref={footerRef} className="bg-card/30">
         <div className="max-w-[1400px] mx-auto px-6 md:px-10 py-16 md:py-24">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-16">
             <div className="md:col-span-5">

@@ -68,6 +68,13 @@ html {
               radial-gradient(ellipse 60% 50% at 80% 20%, hsl(160 30% 40% / 0.04), transparent);
 }
 
+.journey-gradient {
+  background: 
+    radial-gradient(ellipse 100% 80% at 50% 0%, hsl(32 80% 48% / 0.04), transparent),
+    radial-gradient(ellipse 60% 40% at 0% 50%, hsl(160 30% 40% / 0.03), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 80%, hsl(32 80% 48% / 0.03), transparent);
+}
+
 .section-reveal {
   opacity: 0;
   transform: translateY(60px);
@@ -86,6 +93,17 @@ html {
 .line-reveal > span {
   display: inline-block;
   transform: translateY(100%);
+}
+
+.word-reveal {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.word-reveal > span {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
 }
 
 .ticker-track {
@@ -127,6 +145,93 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+.journey-year-giant {
+  font-size: clamp(6rem, 20vw, 16rem);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  font-weight: 400;
+  opacity: 0.08;
+  position: absolute;
+  right: -2%;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+  font-family: var(--font-display);
+}
+
+.timeline-progress-track {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: hsl(35 12% 88% / 0.5);
+}
+
+.timeline-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(to bottom, hsl(32 80% 48%), hsl(32 80% 48% / 0.3));
+  transform-origin: top;
+}
+
+.journey-card-premium {
+  position: relative;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.journey-card-premium::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, hsl(32 80% 48% / 0.15), transparent 50%, hsl(160 30% 40% / 0.1));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.journey-card-premium:hover::before {
+  opacity: 1;
+}
+
+.stat-counter {
+  font-variant-numeric: tabular-nums;
+  transition: color 0.3s ease;
+}
+
+.section-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, hsl(35 12% 88% / 0.6) 20%, hsl(32 80% 48% / 0.2) 50%, hsl(35 12% 88% / 0.6) 80%, transparent);
+}
+
+.text-gradient-reveal {
+  background: linear-gradient(90deg, hsl(30 10% 12%) 0%, hsl(32 80% 48%) 50%, hsl(30 10% 12%) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cert-card-hover {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.6s ease;
+}
+
+.cert-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px -15px hsl(32 80% 48% / 0.1);
+}
+
 .grain-overlay::after {
   content: '';
   position: fixed;
@@ -138,4 +243,22 @@ html {
   opacity: 0.015;
   z-index: 9999;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.float-animation {
+  animation: float-subtle 6s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(32 80% 48% / 0.3); }
+  50% { box-shadow: 0 0 0 8px hsl(32 80% 48% / 0); }
+}
+
+.timeline-dot-active {
+  animation: pulse-dot 2s ease-in-out infinite;
 }
