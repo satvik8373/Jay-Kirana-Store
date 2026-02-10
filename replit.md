@@ -1,15 +1,29 @@
-# Kirana Store - Premium Indian Grocery Showcase
+# Jay Kirana Store - Premium Indian Grocery Showcase
 
-A single-page informational showcase website for an Indian kirana grocery store, featuring Awwwards-style GSAP scroll animations and premium visual design.
+A single-page informational showcase website for Jay Kirana Store, Himatnagar, Gujarat. Features Awwwards-style GSAP scroll animations and premium visual design.
 
 ## Overview
 
 This is a **display-only** website (no e-commerce/shopping functionality). It showcases:
-- Live market prices for essential grocery items (oils, sugar, dal)
-- Product catalog with premium imagery
-- Store journey/timeline from 1995 to 2024
-- Multiple store locations across Delhi
+- Live market prices for essential grocery items (oils, sugar, dal, pulses)
+- Product catalog with premium imagery (6 products across 6 categories)
+- Store journey/timeline from 2017 to 2025
+- Store location, hours, and proprietor info
+- Google 5.0 rating badge
+- Official registration certificates (GST, Nagarpalika)
 - Stats and achievements
+
+## Store Details
+
+- **Store Name**: Jay Kirana Store (Trade Name: Jay Kirana Stores)
+- **Proprietor**: Yogeshkumar Navinchandra Patel
+- **Address**: 01, Station Rd, opp. Char Bhujah Nasta House, Ganotri Society, Himatnagar, Gujarat 383001
+- **Landmark**: Located in Shri Charbhuja Nasta House Building, Near Sarvoday Market
+- **Hours**: Mon-Sat 8:30 AM - 8:30 PM, Sunday 8:30 AM - 1:00 PM
+- **Google Rating**: 5.0
+- **Established**: 2017
+- **GST Registered**: July 2018
+- **Nagarpalika Registration**: September 2022
 
 ## Tech Stack
 
@@ -22,7 +36,7 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 ## Architecture
 
 - **Single-page app**: All content on Home page with smooth scroll navigation
-- **Navigation**: Fixed header with section anchors (#prices, #products, #journey, #locations)
+- **Navigation**: Fixed header with section anchors (#prices, #products, #journey, #visit)
 - **Animations**: GSAP ScrollTrigger for reveal animations, parallax hero, timeline drawing, staggered cards
 - **Data**: Fetched from API endpoints, seeded automatically on startup
 
@@ -37,11 +51,11 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 
 ## API Endpoints
 
-- GET /api/categories - Product categories
-- GET /api/products - All products (optional ?categoryId filter)
-- GET /api/prices - Live market price ticker items
-- GET /api/journey - Store milestones/timeline
-- GET /api/locations - Store branch locations
+- GET /api/categories - Product categories (6 categories)
+- GET /api/products - All products (optional ?categoryId filter, 6 products)
+- GET /api/prices - Live market price ticker items (6 items)
+- GET /api/journey - Store milestones/timeline (5 milestones: 2017-2025)
+- GET /api/locations - Store location (single Himatnagar location)
 
 ## Design Notes
 
@@ -50,9 +64,13 @@ This is a **display-only** website (no e-commerce/shopping functionality). It sh
 - Infinite scrolling price ticker
 - Typography hierarchy: large serif headings, clean sans body text
 - Currency displayed in INR (₹)
+- Certifications section with GST and Nagarpalika certificate images
+- Store hours table with today's day highlighted
+- Google Maps embed for store location
 
 ## Setup
 
 1. Database is provisioned and seeded automatically on server start
 2. Images located in `client/public/images/` (categories/ and products/ subdirectories)
-3. Run `npm run dev` to start
+3. Attached certificate images imported via `@assets/` prefix
+4. Run `npm run dev` to start
